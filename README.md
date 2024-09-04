@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Restaurant Management Website - README
 
-## Getting Started
+## Overview
 
-First, run the development server:
+This repository contains the codebase for the **Las Tapas** comprehensive restaurant management system. The website is designed to streamline various aspects of the restaurant's operations, including customer ordering, employee management, menu and inventory management, sales reporting, and customer feedback. This system integrates all essential features needed to manage a restaurant efficiently, both on the front-end and back-end.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Customer Features
+- **Menu Browsing:** Customers can explore the full menu, organized by categories such as appetizers, main courses, desserts, and beverages. Each item comes with a detailed description, pricing, and customization options (e.g., extra toppings, dietary preferences).
+- **Order Placement:** Customers can place orders for dine-in, takeaway, or delivery, with support for various payment methods including credit cards, PayPal, and cash on delivery.
+- **Order Tracking:** Real-time order tracking allows customers to see the status of their order, from preparation to delivery or pickup, with notifications at each stage.
+- **User Accounts:** Customers can register for an account to save their favorite orders, view their order history, and reorder with ease.
+- **Promotions & Discounts:** Customers can apply promotional codes and discounts at checkout.
+- **Reviews & Ratings:** After their meal, customers can leave reviews and ratings for dishes, helping to improve the overall dining experience.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 2. Employee Features
+- **Order Management:** Employees have access to a detailed overview of all current orders, including customer information, order details, and special instructions. They can update order statuses, ensuring efficient order processing.
+- **Order History:** Employees can view a searchable history of all orders, which aids in handling customer queries, processing refunds, and analyzing sales trends.
+- **Menu Management:** Authorized staff can update the menu, adding, editing, or removing items, and adjusting prices or availability as needed.
+- **Inventory Management:** The system includes inventory tracking, allowing staff to monitor stock levels and mark items as out of stock.
+- **Employee Accounts:** Each employee has a personalized account with role-based access controls, ensuring that only authorized users can perform certain tasks like menu management.
+- **Shift Management:** Employees can view and manage their work schedules, swap shifts, and receive notifications about upcoming shifts.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### 3. Admin Features
+- **User Management:** Admins have full control over user accounts, including the ability to reset passwords, change user roles, and deactivate accounts as needed.
+- **Analytics Dashboard:** A comprehensive dashboard provides insights into restaurant performance, including sales metrics, customer demographics, and inventory levels.
+- **Feedback Management:** Admins can monitor and respond to customer feedback, helping to maintain high service standards.
+- **Loyalty Program Management:** The system supports a customer loyalty program, allowing admins to configure point-based rewards for frequent diners.
+- **Reporting & Analytics:** Generate detailed reports on sales, inventory, employee performance, and customer satisfaction. These reports can be filtered by various criteria, such as time periods or specific menu items.
 
-## Learn More
+### 4. Additional Features
+- **Reservation System:** Customers can make reservations directly through the website, with the system handling availability and confirmation.
+- **Event Management:** Admins can create and manage events (e.g., live music, themed nights), allowing customers to RSVP or purchase tickets online.
+- **Customer Support Chat:** Integrated chat support helps customers get answers to their questions in real-time, improving the overall user experience.
 
-To learn more about Next.js, take a look at the following resources:
+## Tech Stack
+- **Frontend:** HTML, CSS, JavaScript, React.js
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB (for user accounts, order history, menu items, inventory, etc.)
+- **Authentication:** JWT (JSON Web Tokens) for secure user sessions
+- **Payment Processing:** Stripe API for handling payments
+- **Real-Time Updates:** Socket.io for real-time order tracking and notifications
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Usage
+- **Customers** Customers: Sign up or log in to your account, browse the menu, place an order, track its progress, make reservations, and manage your profile.
+- **Employees** Log in to manage orders, update the menu, track inventory, and view your work schedule.
+- **Admins** Access the admin dashboard to manage users, view detailed analytics, maintain the feedback system, and manage events and loyalty programs.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Contact Developers
+- **Abdul:** [voornaam].[achternaam]@student.gildeopleidingen.nl
+- **Bryce:** bryce.van.der.werf.@student.gildeopleidingen.nl
+- **Chris:** [voornaam].[achternaam]@student.gildeopleidingen.nl
+- **Djaro:** [voornaam].[achternaam]@student.gildeopleidingen.nl
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Thank you for using our restaurant management system! We hope it enhances your dining and operational experience.
