@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository contains the codebase for the **Las Tapas** comprehensive restaurant management system. The website is designed to streamline various aspects of the restaurant's operations, including customer ordering, employee management, menu and inventory management, sales reporting, and customer feedback. This system integrates all essential features needed to manage a restaurant efficiently, both on the front-end and back-end.
+This repository contains the codebase for the **Las Tapas** restaurant management system. The website is designed to streamline various aspects of the restaurant's operations, including customer ordering, employee management, menu and inventory management, sales reporting, and customer feedback. This system integrates all essential features needed to manage a restaurant efficiently, both on the front-end and back-end.
 
 ## Features
 
@@ -35,8 +35,8 @@ This repository contains the codebase for the **Las Tapas** comprehensive restau
 - **Customer Support Chat:** Integrated chat support helps customers get answers to their questions in real-time, improving the overall user experience.
 
 ## Tech Stack
-- **Frontend:** HTML, CSS, JavaScript, React.js
-- **Backend:** Node.js, Express.js
+- **Frontend:** HTML, CSS, JavaScript
+- **Backend:** next.js
 - **Database:** MongoDB (for user accounts, order history, menu items, inventory, etc.)
 - **Authentication:** JWT (JSON Web Tokens) for secure user sessions
 - **Payment Processing:** Stripe API for handling payments
@@ -48,9 +48,9 @@ This repository contains the codebase for the **Las Tapas** comprehensive restau
 - **Admins** Access the admin dashboard to manage users, view detailed analytics, maintain the feedback system, and manage events and loyalty programs.
 
 ## Contact Developers
-- **Abdul:** [voornaam].[achternaam]@student.gildeopleidingen.nl
+- **Abdul:** abdul.[achternaam]@student.gildeopleidingen.nl
 - **Bryce:** bryce.van.der.werf.@student.gildeopleidingen.nl
-- **Chris:** [voornaam].[achternaam]@student.gildeopleidingen.nl
-- **Djaro:** [voornaam].[achternaam]@student.gildeopleidingen.nl
+- **Chris:** chris.[achternaam]@student.gildeopleidingen.nl
+- **Djaro:** djaro.[achternaam]@student.gildeopleidingen.nl
 
 Thank you for using our restaurant management system! We hope it enhances your dining and operational experience.
