@@ -1,4 +1,4 @@
-# Restaurant Management Website - README
+    # Restaurant Management Website - README
 
 ## Overview
 
@@ -26,13 +26,10 @@ This repository contains the codebase for the **Las Tapas** restaurant managemen
 - **User Management:** Admins have full control over user accounts, including the ability to reset passwords, change user roles, and deactivate accounts as needed.
 - **Analytics Dashboard:** A comprehensive dashboard provides insights into restaurant performance, including sales metrics, customer demographics, and inventory levels.
 - **Feedback Management:** Admins can monitor and respond to customer feedback, helping to maintain high service standards.
-- **Loyalty Program Management:** The system supports a customer loyalty program, allowing admins to configure point-based rewards for frequent diners.
 - **Reporting & Analytics:** Generate detailed reports on sales, inventory, employee performance, and customer satisfaction. These reports can be filtered by various criteria, such as time periods or specific menu items.
 
 ### 4. Additional Features
 - **Reservation System:** Customers can make reservations directly through the website, with the system handling availability and confirmation.
-- **Event Management:** Admins can create and manage events (e.g., live music, themed nights), allowing customers to RSVP or purchase tickets online.
-- **Customer Support Chat:** Integrated chat support helps customers get answers to their questions in real-time, improving the overall user experience.
 
 ## Tech Stack
 - **Frontend:** HTML, CSS, JavaScript
@@ -43,7 +40,7 @@ This repository contains the codebase for the **Las Tapas** restaurant managemen
 - **Real-Time Updates:** Socket.io for real-time order tracking and notifications
 
 ## Usage
-- **Customers** Customers: Sign up or log in to your account, browse the menu, place an order, track its progress, make reservations, and manage your profile.
+- **Customers** Customers: browse the menu, place an order, track its progress, make reservations.
 - **Employees** Log in to manage orders, update the menu, track inventory, and view your work schedule.
 - **Admins** Access the admin dashboard to manage users, view detailed analytics, maintain the feedback system, and manage events and loyalty programs.
 
