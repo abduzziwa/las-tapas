@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Las Tapas",
-  description: "",
+  description: "Welcome to Las Tapas! Explore our delicious menu, place your order for dine-in, takeaway, or delivery, and track your order in real-time. Enjoy a seamless dining experience with us!",
 };
 
 export default function RootLayout({

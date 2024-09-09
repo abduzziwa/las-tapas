@@ -11,7 +11,6 @@ This repository contains the codebase for the **Las Tapas** restaurant managemen
 - **Order Placement:** Customers can place orders for dine-in, takeaway, or delivery, with support for various payment methods including credit cards, PayPal, and cash on delivery.
 - **Order Tracking:** Real-time order tracking allows customers to see the status of their order, from preparation to delivery or pickup, with notifications at each stage.
 - **User Accounts:** Customers can register for an account to save their favorite orders, view their order history, and reorder with ease.
-- **Promotions & Discounts:** Customers can apply promotional codes and discounts at checkout.
 - **Reviews & Ratings:** After their meal, customers can leave reviews and ratings for dishes, helping to improve the overall dining experience.
 
 ### 2. Employee Features
