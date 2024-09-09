@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
+import { Comfortaa } from "@next/font/google";
 
 export const metadata: Metadata = {
   title: "Las Tapas",
   description: "Welcome to Las Tapas! Explore our delicious menu, place your order for dine-in, takeaway, or delivery, and track your order in real-time. Enjoy a seamless dining experience with us!",
 };
+
+const confortaa = Comfortaa({
+    subsets: ["latin"],
+})
 
 export default function RootLayout({
   children,
@@ -16,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <body className={ confortaa.className }>{children}</body>
     </html>
   );
 }
