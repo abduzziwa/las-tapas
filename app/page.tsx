@@ -1,5 +1,5 @@
 import TopNavbar from "./components/TopNavBar";
-import BottomNavBar from "./components/BottomNavBar"
+import BottomNavbar from "./components/BottomNavBar";
 export default function Home() {
 return (
     <main>
