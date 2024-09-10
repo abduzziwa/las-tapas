@@ -8,19 +8,19 @@ return (
     <div className="flex flex-col w-full items-center p-[24px] gap-[10px]">
 
         <div
-            className="flex items-end w-full h-[155px] rounded-[20px] py-[10px] px-[16px] drop-shadow-lg bg-[url('../public/food.png')] bg-cover">
+            className="flex items-end w-full h-[155px] rounded-[20px] py-[10px] px-[16px] drop-shadow-lg bg-[url('../public/food.png')] bg-cover bg-center">
             <p className="text-base text-white text-[32px] font-bold drop-shadow-lg leading-tight">Food</p>
         </div>
 
         <div className="flex flex-row w-full gap-[10px]">
 
             <div
-                className="flex items-end w-full h-[155px] rounded-[20px] py-[10px] px-[16px] drop-shadow-lg bg-[url('../public/drinks.png')] bg-cover">
+                className="flex items-end w-50% h-[155px] rounded-[20px] py-[10px] px-[16px] drop-shadow-lg bg-[url('../public/drinks.png')] bg-cover bg-center">
                 <p className="text-base text-white text-[32px] font-bold drop-shadow-lg leading-tight">Drinks</p>
             </div>
 
             <div
-                className="flex items-end w-full h-[155px] rounded-[20px] py-[10px] px-[16px] drop-shadow-lg bg-[url('../public/desserts.png')] bg-cover">
+                className="flex items-end w-50% h-[155px] rounded-[20px] py-[10px] px-[16px] drop-shadow-lg bg-[url('../public/desserts.png')] bg-cover bg-center">
                 <p className=" text-white text-[32px] font-bold drop-shadow-lg leading-tight">Desserts</p>
             </div>
         </div>
@@ -31,7 +31,7 @@ return (
         <p className="text-textcolor text-[32px] leading-tight font-medium text-center">Popular Items</p>
 
         <div
-            className="flex items-end w-full h-[155px] rounded-[20px] py-[10px] px-[16px] drop-shadow-lg bg-[url('../public/nachos.png')] bg-center bg-cover">
+            className="flex items-end w-full h-[155px] rounded-[20px] py-[10px] px-[16px] drop-shadow-lg bg-[url('../public/nachos.png')] bg-cover bg-center">
             <p className="text-grey text-white text-[32px] font-bold drop-shadow-lg leading-tight">Nachos</p>
         </div>
 
