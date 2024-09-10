@@ -4,7 +4,7 @@ import historyIcon from '../../public/history-icon.svg';  // Import the history 
 import cartIcon from '../../public/cart-icon.svg';  // Import the cart icon image
 import billIcon from '../../public/bill-icon.svg';  // Import the bill icon image
 
-export default function BottomNavbar() {
+const BottomNavbar: React.FC = () => {
     <div className='flex w-full h-fit px-[10px] py-[8px] bg-gradient-to-tr from-main to-gradientEnd drop-shadow-lg'>
         <div className='px-[26px] py-[12px]'>
             <Link href='/'>
@@ -22,3 +22,5 @@ export default function BottomNavbar() {
         </div>
     </div>
 }
+
+export default BottomNavbar;
