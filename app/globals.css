@@ -1,11 +1,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-
-.comfortaa-300 {
-  font-family: "Comfortaa", system-ui;
-  font-optical-sizing: auto;
-  font-weight: 300;
-  font-style: normal;
-}
