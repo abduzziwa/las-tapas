@@ -1,0 +1,53 @@
+[
+    {
+      "dessertId": "dessert001",
+      "name": "Cheesecake",
+      "description": "Creamy cheesecake with a graham cracker crust",
+      "price": 6.99,
+      "ingredients": ["Cream Cheese", "Graham Crackers", "Sugar", "Eggs"],
+      "countryOfOrigin": "USA",
+      "imageUrl": "https://example.com/images/cheesecake.jpg",
+      "createdAt": "2023-06-20T15:00:00Z"
+    },
+    {
+      "dessertId": "dessert002",
+      "name": "Chocolate Lava Cake",
+      "description": "Warm chocolate cake with a gooey center",
+      "price": 7.49,
+      "ingredients": ["Chocolate", "Flour", "Butter", "Sugar", "Eggs"],
+      "countryOfOrigin": "France",
+      "imageUrl": "https://example.com/images/chocolate-lava-cake.jpg",
+      "createdAt": "2023-07-05T14:30:00Z"
+    },
+    {
+      "dessertId": "dessert003",
+      "name": "Apple Pie",
+      "description": "Classic apple pie with a flaky crust",
+      "price": 5.99,
+      "ingredients": ["Apples", "Flour", "Butter", "Sugar", "Cinnamon"],
+      "countryOfOrigin": "USA",
+      "imageUrl": "https://example.com/images/apple-pie.jpg",
+      "createdAt": "2023-06-25T16:00:00Z"
+    },
+    {
+      "dessertId": "dessert004",
+      "name": "Tiramisu",
+      "description": "Layered coffee-flavored Italian dessert",
+      "price": 6.49,
+      "ingredients": ["Mascarpone Cheese", "Coffee", "Ladyfingers", "Cocoa Powder"],
+      "countryOfOrigin": "Italy",
+      "imageUrl": "https://example.com/images/tiramisu.jpg",
+      "createdAt": "2023-07-15T13:45:00Z"
+    },
+    {
+      "dessertId": "dessert005",
+      "name": "Panna Cotta",
+      "description": "Creamy vanilla-flavored Italian dessert",
+      "price": 5.49,
+      "ingredients": ["Cream", "Sugar", "Vanilla", "Gelatin"],
+      "countryOfOrigin": "Italy",
+      "imageUrl": "https://example.com/images/panna-cotta.jpg",
+      "createdAt": "2023-08-10T11:00:00Z"
+    }
+  ]
+  
