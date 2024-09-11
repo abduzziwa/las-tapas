@@ -1,0 +1,23 @@
+[
+    {
+      "sessionId": "sess001",
+      "userId": "cust001",
+      "role": "customer"
+    },
+    {
+      "sessionId": "sess002",
+      "userId": "emp001",
+      "role": "waiter"
+    },
+    {
+      "sessionId": "sess003",
+      "userId": "emp002",
+      "role": "chef"
+    },
+    {
+      "sessionId": "sess004",
+      "userId": "emp003",
+      "role": "admin"
+    }
+  ]
+  

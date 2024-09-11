@@ -1,0 +1,53 @@
+[
+    {
+      "drinkId": "drink001",
+      "name": "Coke",
+      "description": "Classic cola beverage",
+      "price": 1.99,
+      "ingredients": ["Carbonated Water", "High Fructose Corn Syrup", "Caramel Color"],
+      "countryOfOrigin": "USA",
+      "imageUrl": "https://example.com/images/coke.jpg",
+      "createdAt": "2023-07-15T14:00:00Z"
+    },
+    {
+      "drinkId": "drink002",
+      "name": "Orange Juice",
+      "description": "Freshly squeezed orange juice",
+      "price": 3.49,
+      "ingredients": ["Orange Juice"],
+      "countryOfOrigin": "USA",
+      "imageUrl": "https://example.com/images/orange-juice.jpg",
+      "createdAt": "2023-07-20T11:00:00Z"
+    },
+    {
+      "drinkId": "drink003",
+      "name": "Iced Tea",
+      "description": "Refreshing iced tea with a hint of lemon",
+      "price": 2.49,
+      "ingredients": ["Tea", "Sugar", "Lemon"],
+      "countryOfOrigin": "USA",
+      "imageUrl": "https://example.com/images/iced-tea.jpg",
+      "createdAt": "2023-08-01T16:00:00Z"
+    },
+    {
+      "drinkId": "drink004",
+      "name": "Mojito",
+      "description": "Minty cocktail with lime and soda",
+      "price": 5.99,
+      "ingredients": ["Mint", "Lime", "Sugar", "Soda", "Rum"],
+      "countryOfOrigin": "Cuba",
+      "imageUrl": "https://example.com/images/mojito.jpg",
+      "createdAt": "2023-08-15T17:30:00Z"
+    },
+    {
+      "drinkId": "drink005",
+      "name": "Smoothie",
+      "description": "Blend of fruits and yogurt",
+      "price": 4.99,
+      "ingredients": ["Banana", "Strawberry", "Yogurt"],
+      "countryOfOrigin": "USA",
+      "imageUrl": "https://example.com/images/smoothie.jpg",
+      "createdAt": "2023-08-25T12:45:00Z"
+    }
+  ]
+  
