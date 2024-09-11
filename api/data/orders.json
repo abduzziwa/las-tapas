@@ -1,0 +1,82 @@
+[
+    {
+      "orderId": "order001",
+      "customerId": "cust001",
+      "waiterId": "emp001",
+      "foodItems": [
+        {
+          "foodId": "food001",
+          "foodName": "Margherita Pizza",
+          "quantity": 2,
+          "customizations": "Extra Cheese"
+        }
+      ],
+      "status": "cooking",
+      "timestamps": {
+        "orderedAt": "2023-09-09T18:00:00Z",
+        "cookingStartedAt": "2023-09-09T18:15:00Z"
+      },
+      "tableNumber": "5",
+      "createdBy": "waiter"
+    },
+    {
+      "orderId": "order002",
+      "customerId": "cust002",
+      "waiterId": "emp001",
+      "foodItems": [
+        {
+          "foodId": "food002",
+          "foodName": "Caesar Salad",
+          "quantity": 1
+        }
+      ],
+      "status": "ready",
+      "timestamps": {
+        "orderedAt": "2023-09-10T12:30:00Z",
+        "cookingStartedAt": "2023-09-10T12:40:00Z",
+        "readyAt": "2023-09-10T12:50:00Z"
+      },
+      "tableNumber": "3",
+      "createdBy": "customer"
+    },
+    {
+      "orderId": "order003",
+      "customerId": "cust003",
+      "waiterId": "emp004",
+      "foodItems": [
+        {
+          "foodId": "food003",
+          "foodName": "Sushi Platter",
+          "quantity": 1
+        }
+      ],
+      "status": "served",
+      "timestamps": {
+        "orderedAt": "2023-09-08T19:00:00Z",
+        "cookingStartedAt": "2023-09-08T19:15:00Z",
+        "readyAt": "2023-09-08T19:40:00Z",
+        "servedAt": "2023-09-08T19:45:00Z"
+      },
+      "tableNumber": "2",
+      "createdBy": "waiter"
+    },
+    {
+      "orderId": "order004",
+      "customerId": "cust004",
+      "waiterId": "emp001",
+      "foodItems": [
+        {
+          "foodId": "food004",
+          "foodName": "Tacos",
+          "quantity": 3
+        }
+      ],
+      "status": "notYetOrdered",
+      "timestamps": {
+        "orderedAt": "2023-09-11T13:00:00Z"
+      },
+      "tableNumber": "7",
+      "createdBy": "waiter"
+    }
+  ]
+  
