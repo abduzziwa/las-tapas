@@ -9,15 +9,15 @@ export default function BottomNavBar() {
         <div className='flex w-full h-fit px-[10px] py-[8px] fixed bottom-0 left-0 right-0 '>
             <div className='flex flex-row flex-1 justify-between px-[26px] py-[12px] bg-gradient-to-tr from-main to-gradientEnd drop-shadow-lg rounded-full'>
                 <Link href='/'>
-                    <img className='hover:bg-black' src={homeIcon.src} alt="Home Icon" />
+                    <img src={homeIcon.src} alt="Home Icon" />
                 </Link>
-                <Link href='/'>
+                <Link href='/order-history'>
                     <img src={historyIcon.src} alt="History Icon" />
                 </Link>
-                <Link href='/'>
+                <Link href='/cart'>
                     <img src={cartIcon.src} alt="Cart Icon" />
                 </Link>
-                <Link href='/'>
+                <Link href='/bill'>
                     <img src={billIcon.src} alt="Bill Icon" />
                 </Link>
             </div>
