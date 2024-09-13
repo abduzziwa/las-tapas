@@ -45,7 +45,7 @@ export default function Home() {
       </div>
 
       <div className="flex flex-col w-full items-center px-[24px] gap-[8px]">
-        <p className="text-textcolor text-[28px] leading-tight font-medium text-center">
+        <p className="text-textcolor text-[24px] leading-tight font-light text-center">
           Deals off the week
         </p>
 
