@@ -1,6 +1,6 @@
 import Link from 'next/link';   // Import the Link component
 import logo from '../../public/logo.png';  // Import the logo image
-import searchIcon from '../../public/search-icon.png';  // Import the search icon image
+import searchIcon from '../../public/search-icon.svg';  // Import the search icon image
 
 export default function TopNavBar() {
     return (
