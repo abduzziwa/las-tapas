@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 const confortaa = Comfortaa({
-    subsets: ["latin"],
+  subsets: ["latin"],
 })
 
 export default function RootLayout({
@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-    <body className={ confortaa.className }>{children}</body>
+      <body className={ confortaa.className }>{children}</body>
     </html>
   );
 }
