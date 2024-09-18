@@ -12,8 +12,9 @@ const tableSchema = new mongoose.Schema({
     min: 1,
   },
   occupied: {
-    type: Boolean,
-    default: false,
+    type: String,
+    enum: ["available", "occupied"],
+    default: "available",
   },
   currentOrders: {
     type: [mongoose.Schema.Types.ObjectId],
