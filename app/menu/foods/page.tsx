@@ -1,5 +1,8 @@
 import TopNavBar from "../../components/TopNavBar"; // Import the TopNavBar component
 import BottomNavBar from "../../components/BottomNavBar"; // Import the BottomNavBar component
+import MealComponent from "../../components/MealComponent"; // Import the MealComponent component
+import MealPopup from "@/app/components/MealPopup";
+
 import Link from "next/link";
 
 export default function Foods() {
@@ -14,6 +17,12 @@ export default function Foods() {
           </p>
         </div>
       </div>
+
+      <div className="w-full p-[24px] gap-[10px]">
+        <MealComponent />
+      </div>
+
+      <MealPopup />
 
       <BottomNavBar />
     </main>
