@@ -16,13 +16,8 @@ async function connectToDatabase(): Promise<Connection> {
   if (cachedConnection) {
     return cachedConnection;
   }
-
-  // const opts = {
-  //   bufferCommands: false,
-  // };
-
   try {
-    const mongooseInstance = await mongoose.connect(MONGODB_URI, { bufferCommands: false, dbName: "LAS_TAAPS" });
+    const mongooseInstance = await mongoose.connect(MONGODB_URI, { bufferCommands: false, dbName: "LAS_TAAPS", maxPoolSize: 10});
     cachedConnection = mongooseInstance.connection;
   } catch (error) {
     console.error("Failed to connect to MongoDB", error);
