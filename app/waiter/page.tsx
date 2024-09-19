@@ -1,6 +1,6 @@
 import React from 'react';
-import OrderContainer from './components/OrderContainer';
 import Header from './components/Header';
+import OrderContainer from '../chef/components/OrderContainer';
 
 const Page = () => {
     return (
