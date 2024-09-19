@@ -1,11 +1,48 @@
-import TopNavBar from "../../components/TopNavBar"; // Import the TopNavBar component
-import BottomNavBar from "../../components/BottomNavBar"; // Import the BottomNavBar component
-import MealComponent from "../../components/MealComponent"; // Import the MealComponent component
+"use client";
+import React, { useState } from "react";
+import TopNavBar from "../../components/TopNavBar";
+import BottomNavBar from "../../components/BottomNavBar";
+import MealComponent from "../../components/MealComponent";
 import MealPopup from "@/app/components/MealPopup";
-
 import Link from "next/link";
 
+// Define an interface for the meal data
+interface Meal {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  allergies: string[];
+  price: number;
+}
+
+// Mock data (replace this with your actual data fetching logic)
+const mockMeals: Meal[] = [
+  {
+    id: "1",
+    name: "Spaghetti Carbonara",
+    description: "Classic Italian pasta dish",
+    image: "../public/food.png",
+    allergies: ["eggs", "dairy"],
+    price: 12.99,
+  },
+  // Add more mock meals as needed
+];
+
 export default function Foods() {
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [selectedMeal, setSelectedMeal] = useState<Meal | null>(null);
+
+  const handleMealClick = (meal: Meal) => {
+    setSelectedMeal(meal);
+    setIsPopupVisible(true);
+  };
+
+  const handleClosePopup = () => {
+    setIsPopupVisible(false);
+    setSelectedMeal(null);
+  };
+
   return (
     <main>
       <TopNavBar />
@@ -19,10 +56,22 @@ export default function Foods() {
       </div>
 
       <div className="w-full p-[24px] gap-[10px]">
-        <MealComponent />
+        {mockMeals.map((meal) => (
+          <MealComponent
+            key={meal.id}
+            meal={meal}
+            onMealClick={() => handleMealClick(meal)}
+          />
+        ))}
       </div>
 
-      <MealPopup />
+      {selectedMeal && (
+        <MealPopup
+          visibility={isPopupVisible ? "" : "hidden"}
+          onClose={handleClosePopup}
+          meal={selectedMeal}
+        />
+      )}
 
       <BottomNavBar />
     </main>
