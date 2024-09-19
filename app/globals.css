@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Add this to your global CSS file (e.g., globals.css) */
+* {
+    caret-color: transparent;
+  }
+  
+  /* If you want to re-enable the cursor for input fields and textareas */
+  input, textarea {
+    caret-color: auto;
+  }
