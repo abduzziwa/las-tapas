@@ -10,11 +10,13 @@ const MealPopup = () => {
           <p className="text-white text-[16px] leading-tight font-bold">
             Table : 4
           </p>
-          <img
-            className="w-[16px] h-[16px]"
-            src={CloseIcon.src}
-            alt="close-icon"
-          />
+          <button>
+            <img
+              className="w-[16px] h-[16px]"
+              src={CloseIcon.src}
+              alt="close-icon"
+            />
+          </button>
         </div>
         <div className="flex w-full h-full px-[20px] py-[8px] gap-[8px]">
           <img
@@ -32,10 +34,12 @@ const MealPopup = () => {
           </div>
         </div>
         <div className="flex flex-row w-full h-fit items-center justify-between px-[20px] pb-[12px]">
-            <p className="text-white text-[12px] leading-tight font-light">
-                Allergies:
-            </p>
-            <button className="px-[12px] py-[10px] bg-white rounded-full text-[12px] leading-tight font-light">Add to cart</button>
+          <p className="text-white text-[12px] leading-tight font-light">
+            Allergies:
+          </p>
+          <button className="px-[12px] py-[10px] bg-white rounded-full text-[12px] leading-tight font-light">
+            Add to cart
+          </button>
         </div>
       </div>
     </div>
