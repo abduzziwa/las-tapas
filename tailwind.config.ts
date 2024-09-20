@@ -17,6 +17,8 @@ const config: Config = {
             },
             colors: {
                 main: "#F95E07",
+                maingreen: "#22C536",
+                mainred: "#EF4443",
                 gradientEnd: "#DB8555",
                 textcolor: "#464646",
             },

@@ -27,27 +27,17 @@ const MealPopup: React.FC<Props> = ({ visibility = "", onClose, meal }) => {
       }
       style={{ caretColor: "transparent" }}
     >
-      <div className="flex flex-col z-10 w-[345px] h-[235px] bg-main rounded-[20px] drop-shadow-lg">
+      <div className="flex flex-col z-10 w-[345px] h-[235px] bg-gradient-to-tr from-main to-gradientEnd rounded-[20px] drop-shadow-lg">
         <div className="flex flex-row justify-between items-center w-full h-fit pt-[12px] px-[20px]">
           <p className="text-white text-[16px] leading-tight font-bold">
             Table : 4
           </p>
-<<<<<<< HEAD
-          <button>
-            <img
-              className="w-[16px] h-[16px]"
-              src={CloseIcon.src}
-              alt="close-icon"
-            />
-          </button>
-=======
           <img
             className="w-[16px] h-[16px] cursor-pointer"
             src={CloseIcon.src}
             alt="close-icon"
             onClick={onClose}
           />
->>>>>>> A
         </div>
         <div className="flex w-full h-full px-[20px] py-[8px] gap-[8px]">
           <img
@@ -69,11 +59,7 @@ const MealPopup: React.FC<Props> = ({ visibility = "", onClose, meal }) => {
         </div>
         <div className="flex flex-row w-full h-fit items-center justify-between px-[20px] pb-[12px]">
           <p className="text-white text-[12px] leading-tight font-light">
-<<<<<<< HEAD
-            Allergies:
-=======
             Allergies: {meal.allergies.join(", ")}
->>>>>>> A
           </p>
           <button className="px-[12px] py-[10px] bg-white rounded-full text-[12px] leading-tight font-light">
             Add to cart
