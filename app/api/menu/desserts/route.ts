@@ -2,10 +2,13 @@ import { NextResponse } from "next/server";
 import connectToDatabase from "../../models/Connection";
 import { Menu } from "../../models/menuItem";
 
+
+
+
 export async function GET(req: Request) {
     try {
         await connectToDatabase();
-        const result = await Menu.find({ category: 'drink' })
+        const result = await Menu.find({ category: 'dessert' })
         console.log("Menu Requested: " +  Date.now())
         return NextResponse.json(result, { status: 200 });
     } catch (error) {

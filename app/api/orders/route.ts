@@ -9,19 +9,18 @@ export async function GET(req: Request) {
         // Get the URL from the request
         const url = new URL(req.url);
         
-        // Check if there's an 'id' parameter
-        const id = url.searchParams.get('id');
+        const orderId = url.searchParams.get('orderId');
 
         let result;
-        if (id) {
+        if (orderId) {
             // order met een een bepaald id
-            result = await Orders.findById({}, { id});
+            result = await Orders.findById({}, {orderId});
             if (!result) {
                 return NextResponse.json({ message: 'Order not found' }, { status: 404 });
             }
         } else {
             // Geen id ( Alle data)
-            result = await Orders.find();
+            result = await Orders.find({ status: { $ne: 'ready' } });
         }
 
         return NextResponse.json(result, { status: 200 });
