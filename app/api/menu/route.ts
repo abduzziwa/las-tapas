@@ -7,7 +7,7 @@ export async function GET(req: Request) {
     try {
         await connectToDatabase();
         const result = await Menu.find()
-        console.log("Menu Requested: " +  Date.now())
+        // console.log("Menu Requested: " +  Date.now())
         return NextResponse.json(result, { status: 200 });
     } catch (error) {
         console.error('Error fetching menu items:', error);

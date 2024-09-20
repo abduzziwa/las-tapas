@@ -49,4 +49,5 @@ const menuSchema = new Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-export const Menu = model('menu', menuSchema, 'menu');
+export const Menu = mongoose.models.Menu || mongoose.model('Menu', menuSchema, 'menu');
+// export const Orders = mongoose.models.Orders || mongoose.model('Orders', orderSchema, 'orders');

@@ -22,4 +22,5 @@ const tableSchema = new mongoose.Schema({
   },
 });
 
-export const Table =  mongoose.model('Table', tableSchema, 'tables');
+export const Tables = mongoose.models.Tables || mongoose.model('Tables', tableSchema, 'tables');
+// export const Table =  mongoose.model('Table', tableSchema, 'tables');

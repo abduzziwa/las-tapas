@@ -1,11 +1,11 @@
-import { Table } from "../models/tables";
 import connectToDatabase from "../models/Connection";
 import { NextResponse } from "next/server";
+import { Tables } from "../models/tables";
 
 export async function GET(){
     try {
         await connectToDatabase()
-        const result = await Table.find()
+        const result = await Tables.find()
         return NextResponse.json( result, { status: 200})
         
     } catch (error) {

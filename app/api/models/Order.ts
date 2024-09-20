@@ -1,4 +1,5 @@
-import { Schema, model } from 'mongoose';
+import mongoose, { Schema } from "mongoose";
+
 
 const orderSchema = new Schema({
   _id: {
@@ -37,7 +38,7 @@ const orderSchema = new Schema({
   status: {
     type: String,
     required: true,
-    enum: ['notYetOrdered', 'preparing', 'ready', 'delivered'],
+    enum: ['notYetOrdered', 'ordered', 'preparing', 'ready', 'delivered'],
   },
   timestamps: {
     orderedAt: {
@@ -47,4 +48,5 @@ const orderSchema = new Schema({
   },
 });
 
-export const Orders = model('orders', orderSchema, 'orders');
+export const Orders = mongoose.models.Orders || mongoose.model('Orders', orderSchema, 'orders');
+// export const Orders = model('orders', orderSchema, 'orders');
