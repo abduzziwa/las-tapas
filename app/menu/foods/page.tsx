@@ -22,7 +22,7 @@ const mockMeals: Meal[] = [
     id: "1",
     name: "Spaghetti Carbonara",
     description: "Classic Italian pasta dish",
-    image: "../public/food.png",
+    image: "",
     allergies: ["eggs", "dairy"],
     price: 12.99,
   },

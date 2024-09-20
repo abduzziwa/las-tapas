@@ -1,5 +1,4 @@
 import React from "react";
-import MealImage from "../../public/food.png";
 
 interface Meal {
   id: string;
@@ -26,15 +25,15 @@ const MealComponent: React.FC<MealComponentProps> = ({ meal, onMealClick }) => {
         alt={meal.name}
         className="w-full h-40 object-cover rounded-lg"
       /> */}
-      <h3 className="text-white text-[28px] font-bold drop-shadow-lg leading-tight">
+      <h3 className="text-white text-[25px] font-bold drop-shadow-lg leading-tight">
         {meal.name}
       </h3>
-      <p className="text-white text-[24px] leading-tight font-light drop-shadow-lg">
+      <p className="text-white text-[20px] leading-tight font-light drop-shadow-lg">
         {meal.description}
       </p>
-      <p className="text-white text-[24px] leading-tight font-light drop-shadow-lg">
+      {/* <p className="text-white text-[24px] leading-tight font-light drop-shadow-lg">
         ${meal.price.toFixed(2)}
-      </p>
+      </p> */}
     </div>
   );
 };
