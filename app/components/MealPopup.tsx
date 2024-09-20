@@ -27,7 +27,7 @@ const MealPopup: React.FC<Props> = ({ visibility = "", onClose, meal }) => {
       }
       style={{ caretColor: "transparent" }}
     >
-      <div className="flex flex-col z-10 w-[345px] h-[235px] bg-main rounded-[20px] drop-shadow-lg">
+      <div className="flex flex-col z-10 w-[345px] h-[235px] bg-gradient-to-tr from-main to-gradientEnd rounded-[20px] drop-shadow-lg">
         <div className="flex flex-row justify-between items-center w-full h-fit pt-[12px] px-[20px]">
           <p className="text-white text-[16px] leading-tight font-bold">
             Table : 4
