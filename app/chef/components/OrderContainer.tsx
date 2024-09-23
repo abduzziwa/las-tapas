@@ -52,6 +52,7 @@
 // };
 
 // export default OrderContainer;
+"use client";
 import React, { useState } from "react";
 import Button from "./Button";
 import Order from "./Order";
@@ -121,7 +122,7 @@ const OrderContainer: React.FC<Props> = ({ orderData, onUpdateStatus }) => {
   const buttonProps = getButtonProps();
 
   return (
-    <div className="flex flex-col rounded-[20px] border-solid border-[5px] border-[#FB9933] p-[12px] w-fit gap-y-[10px]">
+    <div className="ml-5 flex flex-col rounded-[20px] border-solid border-[5px] border-[#FB9933] p-[12px] gap-y-[10px] w-[22rem]">
       <Order
         OrderNumber={orderData.orderId}
         TableNumber={orderData.tableNumber}
