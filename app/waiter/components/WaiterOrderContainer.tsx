@@ -107,13 +107,13 @@ const WaiterOrderContainer: React.FC<Props> = ({
   const getButtonProps = () => {
     switch (orderData.status) {
       case "ordered":
-        return { text: "Start", color: "#FB9933" };
+        return { text: "Start", color: "#FB9933", disable: false };
       case "preparing":
-        return { text: "preparing...", color: "#FB9933" };
+        return { text: "prep...", color: "#fdce9b", disable: true };
       case "ready":
-        return { text: "Serve", color: "#4CAF50" };
+        return { text: "Serve", color: "#4CAF50", disable: false };
       default:
-        return { text: "Error", color: "#FF0000" };
+        return { text: "Error", color: "#FF0000", disable: true };
     }
   };
 
@@ -138,6 +138,7 @@ const WaiterOrderContainer: React.FC<Props> = ({
         color={buttonProps.color}
         onClick={handleButtonClick}
         isLoading={isLoading}
+        disable={buttonProps.disable}
       />
     </div>
   );
