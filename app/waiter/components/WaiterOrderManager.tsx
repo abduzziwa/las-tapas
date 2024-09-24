@@ -92,6 +92,7 @@
 // export default WaiterOrderManager;
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import WaiterOrderContainer from "./WaiterOrderContainer";
+import { endpoints } from "@/app/api/endpoint";
 
 interface OrderData {
   _id: string;
@@ -117,7 +118,7 @@ const WaiterOrderManager: React.FC = () => {
   const fetchOrders = useCallback(async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/orders/waiterOrderList"
+        `${endpoints.next_fullUrl}/api/orders/waiterOrderList`
       );
       const newData = await response.json();
       if (Array.isArray(newData)) {
@@ -169,7 +170,7 @@ const WaiterOrderManager: React.FC = () => {
     ) => {
       try {
         const response = await fetch(
-          `http://localhost:3000/api/orders/updateOrderStatus`,
+          `${endpoints.next_fullUrl}/api/orders/updateOrderStatus`,
           {
             method: "PUT",
             headers: {

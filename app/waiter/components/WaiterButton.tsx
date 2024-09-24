@@ -62,18 +62,3 @@ const WaiterButton: React.FC<Props> = ({
 };
 
 export default WaiterButton;
-
-//   return (
-//     <div className="relative">
-//       <button
-//         className="font-bold text-[35px] py-[10px] px-[10px] rounded-[12px]"
-//         style={{ background: color, opacity: isLoading ? 0.5 : 1 }}
-//         onClick={() => setIsOpen(true)}
-//         disabled={isLoading}
-//       >
-//         {isLoading ? "Loading..." : text}
-//       </button>
-//
-//     </div>
-//   );
-// };
