@@ -68,7 +68,7 @@ const Order = ({ OrderNumber, TableNumber }: Props) => {
 
   const formattedDateTime = getFormattedDateTime();
   return (
-    <div className="flex border-solid border-2 border-[#8A8A8A] p-[20px] rounded-[20px] justify-between">
+    <div className="flex border-solid border-2 border-[#8A8A8A] p-[20px] rounded-[20px] justify-between w-[20rem]">
       <div>
         <p className="leading-tight text-[20px]">Order #{OrderNumber}</p>
         <p className="leading-tight font-normal text-[14px]">

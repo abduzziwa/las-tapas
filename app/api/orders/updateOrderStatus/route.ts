@@ -8,7 +8,7 @@ export async function PUT(req: Request) {
         await connectToDatabase();
 
         // Parse the request body for the data
-        const { orderId, status, sessionId } = await req.json();
+        const { orderId, status, sessionId, } = await req.json();
 
         // Check if all required fields are present
         if (!orderId || !status || !sessionId) {
@@ -16,7 +16,7 @@ export async function PUT(req: Request) {
         }
 
         // Validate the status value
-        const validStatuses = ['notYetOrdered', 'preparing', 'ready', 'delivered'];
+        const validStatuses = ['notYetOrdered', 'preparing', 'ready', 'served'];
         if (!validStatuses.includes(status)) {
             return NextResponse.json({ message: 'Invalid status value' }, { status: 400 });
         }

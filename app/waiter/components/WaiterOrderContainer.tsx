@@ -54,9 +54,10 @@
 // export default OrderContainer;
 "use client";
 import React, { useState } from "react";
-import Button from "./Button";
-import Order from "./Order";
-import OrderList from "./OrderList";
+import WaiterOrderList from "./WaiterOrderList";
+import WaiterButton from "./WaiterButton";
+import WaiterOrder from "./WaiterOrder";
+import { time } from "console";
 
 interface OrderData {
   _id: string;
@@ -69,7 +70,7 @@ interface OrderData {
     quantity: number;
     _id: string;
   }[];
-  status: "ordered" | "preparing" | "ready";
+  status: "ordered" | "preparing" | "ready" | "served";
   timestamps: {
     orderedAt: string;
   };
@@ -80,24 +81,21 @@ interface Props {
   onUpdateStatus: (
     orderId: string,
     sessionId: string,
-    newStatus: "preparing" | "ready"
+    newStatus: "preparing" | "ready" | "served"
   ) => Promise<void>;
 }
 
-const OrderContainer: React.FC<Props> = ({ orderData, onUpdateStatus }) => {
+const WaiterOrderContainer: React.FC<Props> = ({
+  orderData,
+  onUpdateStatus,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleButtonClick = async () => {
     setIsLoading(true);
     try {
-      if (orderData.status === "ordered") {
-        await onUpdateStatus(
-          orderData.orderId,
-          orderData.sessionId,
-          "preparing"
-        );
-      } else if (orderData.status === "preparing") {
-        await onUpdateStatus(orderData.orderId, orderData.sessionId, "ready");
+      if (orderData.status === "ready") {
+        await onUpdateStatus(orderData.orderId, orderData.sessionId, "served");
       }
     } catch (error) {
       console.error("Error updating order status:", error);
@@ -109,40 +107,41 @@ const OrderContainer: React.FC<Props> = ({ orderData, onUpdateStatus }) => {
   const getButtonProps = () => {
     switch (orderData.status) {
       case "ordered":
-        return { text: "Start", color: "#FB9933" };
+        return { text: "Start", color: "#FB9933", disable: false };
       case "preparing":
-        return { text: "Ready", color: "#4CAF50" };
+        return { text: "prep...", color: "#fdce9b", disable: true };
       case "ready":
-        return { text: "Completed", color: "#8A8A8A" };
+        return { text: "Serve", color: "#4CAF50", disable: false };
       default:
-        return { text: "Error", color: "#FF0000" };
+        return { text: "Error", color: "#FF0000", disable: true };
     }
   };
 
   const buttonProps = getButtonProps();
 
   return (
-    <div className="ml-5 flex flex-col rounded-[20px] border-solid border-[5px] border-[#FB9933] p-[12px] gap-y-[10px] w-[22rem]">
-      <Order
+    <div className="ml-11 flex flex-col rounded-[20px] border-solid border-[5px] border-[#FB9933] p-[12px] gap-y-[10px] w-[17rem]">
+      <WaiterOrder
         OrderNumber={orderData.orderId}
         TableNumber={orderData.tableNumber}
       />
       {orderData.foodItems.map((item) => (
-        <OrderList
+        <WaiterOrderList
           key={item._id}
           name={item.foodName}
           quantity={item.quantity}
-          description="" // Add description if available in your data
+          description=""
         />
       ))}
-      <Button
+      <WaiterButton
         text={buttonProps.text}
         color={buttonProps.color}
         onClick={handleButtonClick}
         isLoading={isLoading}
+        disable={buttonProps.disable}
       />
     </div>
   );
 };
 
-export default OrderContainer;
+export default WaiterOrderContainer;

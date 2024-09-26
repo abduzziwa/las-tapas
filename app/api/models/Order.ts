@@ -38,13 +38,21 @@ const orderSchema = new Schema({
   status: {
     type: String,
     required: true,
-    enum: ['notYetOrdered', 'ordered', 'preparing', 'ready', 'delivered'],
+    enum: ['notYetOrdered', 'ordered', 'preparing', 'ready', 'served'],
   },
   timestamps: {
     orderedAt: {
       type: Date,
-      default: Date.now,
     },
+    preparingAt: {
+      type: Date,
+    },
+    readyAt: {
+      type: Date,
+    },
+    servedAt: {
+      type: Date,
+    }
   },
 });
 
