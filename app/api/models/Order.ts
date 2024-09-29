@@ -27,12 +27,14 @@ const orderSchema = new Schema({
       foodName: {
         type: String,
         required: true,
+        modifications: String,
       },
       quantity: {
         type: Number,
         required: true,
         min: 1,
       },
+      modification: String 
     },
   ],
   status: {
