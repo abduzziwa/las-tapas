@@ -1,5 +1,5 @@
 // "use client";
-// import React, { useState } from "react";
+// import React, { useState, useEffect } from "react";
 // import TopNavBar from "../../components/TopNavBar";
 // import BottomNavBar from "../../components/BottomNavBar";
 // import MealComponent from "../../components/MealComponent";
@@ -14,7 +14,7 @@
 //   ingredients: string[];
 //   halal: boolean;
 //   vegetarian: boolean;
-//   countryOfOrigin: string;`
+//   countryOfOrigin: string;
 //   imageUrl: string;
 //   createdAt: {
 //     $date: string;
@@ -26,44 +26,61 @@
 //   name: string;
 //   quantity: number;
 //   modification: string;
+//   price: number;
 // }
 
-// const mockMeals: Meal[] = [
-//   {
-//     foodId: "food001",
-//     name: "Stamppot",
-//     description: "Traditional Dutch dish with mashed potatoes and vegetables",
-//     price: 12.5,
-//     category: "food",
-//     ingredients: ["potatoes", "kale", "carrots", "onions", "smoked sausage"],
-//     halal: false,
-//     vegetarian: false,
-//     countryOfOrigin: "Netherlands",
-//     imageUrl: "https://example.com/stamppot.jpg",
-//     createdAt: {
-//       $date: "2024-09-17T10:38:29.282Z",
-//     },
-//   },
-// ];
-
 // export default function Foods() {
+//   const [meals, setMeals] = useState<Meal[]>([]);
 //   const [isPopupVisible, setIsPopupVisible] = useState(false);
 //   const [selectedMeal, setSelectedMeal] = useState<Meal | null>(null);
-//   const [cartItems, setCartItems] = useState<OrderItem[]>([]); // State to store the cart items
+//   const [cartItems, setCartItems] = useState<OrderItem[]>([]);
+//   const [isLoading, setIsLoading] = useState(true);
 
-//   // Handle opening the meal popup when a meal is clicked
+//   // Load cart items from localStorage on component mount
+//   useEffect(() => {
+//     const storedCartItems = localStorage.getItem("CartItems");
+//     if (storedCartItems) {
+//       setCartItems(JSON.parse(storedCartItems));
+//     }
+//   }, []);
+
+//   // Update localStorage whenever cartItems changes
+//   useEffect(() => {
+//     localStorage.setItem("CartItems", JSON.stringify(cartItems));
+//   }, [cartItems]);
+
+//   useEffect(() => {
+//     const fetchMeals = async () => {
+//       setIsLoading(true);
+//       try {
+//         const response = await fetch(
+//           "http://192.168.231.119:3000/api/menu/foods"
+//         );
+//         if (!response.ok) {
+//           throw new Error("Failed to fetch meals");
+//         }
+//         const data: Meal[] = await response.json();
+//         setMeals(data);
+//       } catch (error) {
+//         console.error(error);
+//       } finally {
+//         setIsLoading(false);
+//       }
+//     };
+
+//     fetchMeals();
+//   }, []);
+
 //   const handleMealClick = (meal: Meal) => {
 //     setSelectedMeal(meal);
 //     setIsPopupVisible(true);
 //   };
 
-//   // Handle closing the meal popup
 //   const handleClosePopup = () => {
 //     setIsPopupVisible(false);
 //     setSelectedMeal(null);
 //   };
 
-//   // Handle adding a meal to the cart
 //   const handleAddToCart = (mealData: {
 //     foodId: string;
 //     foodName: string;
@@ -76,11 +93,11 @@
 //       name: mealData.foodName,
 //       quantity: mealData.quantity,
 //       modification: mealData.modification,
+//       price: mealData.foodPrice,
 //     };
-//     // Add the new meal to the cartItems array
 //     setCartItems((prevItems) => [...prevItems, newOrderItem]);
 //   };
-//   console.log(cartItems);
+
 //   return (
 //     <main>
 //       <TopNavBar />
@@ -93,29 +110,37 @@
 //         </div>
 //       </div>
 
-//       <div className="w-full p-[24px] gap-[10px]">
-//         {mockMeals.map((meal) => (
-//           <MealComponent
-//             key={meal.foodId}
-//             meal={meal}
-//             onMealClick={() => handleMealClick(meal)}
-//           />
-//         ))}
-//       </div>
+//       {isLoading ? (
+//         <div className="flex justify-center items-center h-64">
+//           <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+//         </div>
+//       ) : (
+//         <div className="flex flex-wrap justify-between gap-4 p-[24px]">
+//           {meals.map((meal) => (
+//             <div
+//               className="flex-1 min-w-[9.85rem] max-w-[calc(50%-1rem)]"
+//               key={meal.foodId}
+//             >
+//               <MealComponent
+//                 meal={meal}
+//                 onMealClick={() => handleMealClick(meal)}
+//               />
+//             </div>
+//           ))}
+//         </div>
+//       )}
 
-//       {/* Show popup for selected meal */}
 //       {selectedMeal && (
 //         <MealPopup
 //           visibility={isPopupVisible ? "" : "hidden"}
 //           onClose={handleClosePopup}
 //           meal={selectedMeal}
-//           onAddToCart={handleAddToCart} // Pass the function to add meal to cart
+//           onAddToCart={handleAddToCart}
 //         />
 //       )}
 
 //       <BottomNavBar />
 
-//       {/* Display current order */}
 //       <div className="order-summary p-[24px]">
 //         {cartItems.length > 0 ? (
 //           cartItems.map((item, index) => (
@@ -166,46 +191,53 @@ interface OrderItem {
   name: string;
   quantity: number;
   modification: string;
+  price: number;
 }
 
 export default function Foods() {
-  const [meals, setMeals] = useState<Meal[]>([]); // State to store meals fetched from API
+  const [meals, setMeals] = useState<Meal[]>([]);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [selectedMeal, setSelectedMeal] = useState<Meal | null>(null);
-  const [cartItems, setCartItems] = useState<OrderItem[]>([]); // State to store the cart items
+  const [cartItems, setCartItems] = useState<OrderItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch meals from the API on component mount
+  // Check if cart items exist in localStorage without initializing an empty array
+  useEffect(() => {
+    const storedCartItems = localStorage.getItem("CartItems");
+    if (storedCartItems) {
+      setCartItems(JSON.parse(storedCartItems));
+    }
+  }, []);
+
+  // Update localStorage whenever cartItems changes
+  useEffect(() => {
+    if (cartItems.length > 0) {
+      localStorage.setItem("CartItems", JSON.stringify(cartItems));
+    }
+  }, [cartItems]);
+
+  // Fetch meal data from the API
   useEffect(() => {
     const fetchMeals = async () => {
+      setIsLoading(true);
       try {
         const response = await fetch(
-          "http://192.168.178.12:3000/api/menu/foods"
+          "http://192.168.231.119:3000/api/menu/foods"
         );
         if (!response.ok) {
           throw new Error("Failed to fetch meals");
         }
         const data: Meal[] = await response.json();
         setMeals(data);
-        console.log(meals); // Set the fetched meals into state
       } catch (error) {
-        console.error(error);
+        console.error("Error fetching meals:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchMeals();
   }, []);
-
-  // Handle opening the meal popup when a meal is clicked
-  const handleMealClick = (meal: Meal) => {
-    setSelectedMeal(meal);
-    setIsPopupVisible(true);
-  };
-
-  // Handle closing the meal popup
-  const handleClosePopup = () => {
-    setIsPopupVisible(false);
-    setSelectedMeal(null);
-  };
 
   // Handle adding a meal to the cart
   const handleAddToCart = (mealData: {
@@ -220,12 +252,24 @@ export default function Foods() {
       name: mealData.foodName,
       quantity: mealData.quantity,
       modification: mealData.modification,
+      price: mealData.foodPrice,
     };
-    // Add the new meal to the cartItems array
+
+    // Add new item to the cartItems array
     setCartItems((prevItems) => [...prevItems, newOrderItem]);
   };
 
-  console.log(cartItems);
+  // Handle opening the meal popup
+  const handleMealClick = (meal: Meal) => {
+    setSelectedMeal(meal);
+    setIsPopupVisible(true);
+  };
+
+  // Handle closing the meal popup
+  const handleClosePopup = () => {
+    setIsPopupVisible(false);
+    setSelectedMeal(null);
+  };
 
   return (
     <main>
@@ -239,43 +283,41 @@ export default function Foods() {
         </div>
       </div>
 
-      {/* <div className="w-full p-[24px] gap-[1rem] columns-2">
-        {meals.map((meal) => (
-          <MealComponent
-            key={meal.foodId}
-            meal={meal}
-            onMealClick={() => handleMealClick(meal)}
-          />
-        ))}
-      </div> */}
-      <div className="flex flex-wrap justify-between gap-4 p-[24px]">
-        {meals.map((meal) => (
-          <div
-            className="flex-1 min-w-[9.85rem] max-w-[calc(50%-1rem)]"
-            key={meal.foodId}
-          >
-            <MealComponent
-              meal={meal}
-              onMealClick={() => handleMealClick(meal)}
-            />
-          </div>
-        ))}
-      </div>
+      {/* Loading state while fetching meals */}
+      {isLoading ? (
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+        </div>
+      ) : (
+        <div className="flex flex-wrap justify-between gap-4 p-[24px]">
+          {meals.map((meal) => (
+            <div
+              className="flex-1 min-w-[9.85rem] max-w-[calc(50%-1rem)]"
+              key={meal.foodId}
+            >
+              <MealComponent
+                meal={meal}
+                onMealClick={() => handleMealClick(meal)}
+              />
+            </div>
+          ))}
+        </div>
+      )}
 
-      {/* Show popup for selected meal */}
+      {/* Popup for selected meal */}
       {selectedMeal && (
         <MealPopup
           visibility={isPopupVisible ? "" : "hidden"}
           onClose={handleClosePopup}
           meal={selectedMeal}
-          onAddToCart={handleAddToCart} // Pass the function to add meal to cart
+          onAddToCart={handleAddToCart}
         />
       )}
 
       <BottomNavBar />
 
-      {/* Display current order */}
-      <div className="order-summary p-[24px]">
+      {/* Display current cart items */}
+      {/* <div className="order-summary p-[24px]">
         {cartItems.length > 0 ? (
           cartItems.map((item, index) => (
             <div key={index} className="order-item mb-2">
@@ -291,9 +333,9 @@ export default function Foods() {
             </div>
           ))
         ) : (
-          <p>No items in the order.</p>
+          <p>No items in the cart.</p>
         )}
-      </div>
+      </div> */}
     </main>
   );
 }
