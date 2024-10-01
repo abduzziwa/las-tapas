@@ -10,8 +10,8 @@ const config: Config = {
     theme: {
         extend: {
             fontSize: {
-                base: ['10px', '1rem'], // Change base `1rem` to 10px
-              },
+                base: ['10px', '1rem'],
+            },
             fontFamily: {
                 Comfortaa: "Comfortaa",
             },
@@ -24,8 +24,8 @@ const config: Config = {
             },
             backgroundImage: {
                 "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-                "gradient-conic":
-                    "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+                "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+                "custom-gradient": "linear-gradient(86deg, #F95E07 27.38%, #DB8555 72.62%)",
             },
         },
     },
