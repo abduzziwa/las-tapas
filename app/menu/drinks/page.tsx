@@ -167,6 +167,7 @@ import TopNavBar from "../../components/TopNavBar";
 import BottomNavBar from "../../components/BottomNavBar";
 import MealComponent from "../../components/MealComponent";
 import MealPopup from "@/app/components/MealPopup";
+import { endpoints } from "@/app/api/endpoint";
 
 export interface Meal {
   foodId: string;
@@ -190,6 +191,7 @@ interface OrderItem {
   quantity: number;
   modification: string;
   price: number;
+  category: string;
 }
 
 export default function Foods() {
@@ -220,7 +222,7 @@ export default function Foods() {
       setIsLoading(true);
       try {
         const response = await fetch(
-          "http://192.168.231.119:3000/api/menu/drinks"
+          `http://${endpoints.next_ip_port}/api/menu/drinks`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch meals");
@@ -244,6 +246,7 @@ export default function Foods() {
     quantity: number;
     foodPrice: number;
     modification: string;
+    category: string;
   }) => {
     const newOrderItem: OrderItem = {
       foodId: mealData.foodId,
@@ -251,6 +254,7 @@ export default function Foods() {
       quantity: mealData.quantity,
       modification: mealData.modification,
       price: mealData.foodPrice,
+      category: mealData.category,
     };
 
     // Add new item to the cartItems array

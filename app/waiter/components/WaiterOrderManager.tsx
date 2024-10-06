@@ -13,7 +13,7 @@
 //     quantity: number;
 //     _id: string;
 //   }[];
-//   status: "ordered" | "preparing" | "ready";
+//   status: "ordered" | "preparing" | "ready" | "served";
 //   timestamps: {
 //     orderedAt: string;
 //   };
@@ -93,23 +93,8 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import WaiterOrderContainer from "./WaiterOrderContainer";
 import { endpoints } from "@/app/api/endpoint";
+import { OrderData } from "@/app/chef/components/OrderContainer";
 
-interface OrderData {
-  _id: string;
-  orderId: string;
-  sessionId: string;
-  tableNumber: string;
-  foodItems: {
-    foodId: string;
-    foodName: string;
-    quantity: number;
-    _id: string;
-  }[];
-  status: "ordered" | "preparing" | "ready" | "served";
-  timestamps: {
-    orderedAt: string;
-  };
-}
 
 const WaiterOrderManager: React.FC = () => {
   const [orders, setOrders] = useState<OrderData[]>([]);
@@ -118,7 +103,7 @@ const WaiterOrderManager: React.FC = () => {
   const fetchOrders = useCallback(async () => {
     try {
       const response = await fetch(
-        `${endpoints.next_fullUrl}/api/orders/waiterOrderList`
+        `http://${endpoints.next_ip_port}/api/orders/waiterOrderList`
       );
       const newData = await response.json();
       if (Array.isArray(newData)) {
@@ -126,7 +111,7 @@ const WaiterOrderManager: React.FC = () => {
 
         const updatedOrders = newData.map((newOrder) => {
           const existingOrder = ordersRef.current.find(
-            (order) => order._id === newOrder._id
+            (order) => order.orderId === newOrder.orderId
           );
           if (
             !existingOrder ||
@@ -170,7 +155,7 @@ const WaiterOrderManager: React.FC = () => {
     ) => {
       try {
         const response = await fetch(
-          `${endpoints.next_fullUrl}/api/orders/updateOrderStatus`,
+          `http://${endpoints.next_ip_port}/api/orders/updateOrderStatus`,
           {
             method: "PUT",
             headers: {
@@ -186,7 +171,7 @@ const WaiterOrderManager: React.FC = () => {
 
         if (response.ok) {
           const updatedOrders = ordersRef.current.map((order) =>
-            order.orderId === orderId ? { ...order, status: newStatus } : order
+            order.orderId === orderId ? { ...order, status: newStatus as "preparing" | "ready" | "ordered" } : order
           );
           ordersRef.current = updatedOrders;
           setOrders(updatedOrders);
@@ -204,7 +189,7 @@ const WaiterOrderManager: React.FC = () => {
     <div className="flex flex-row flex-wrap gap-3">
       {orders.map((order) => (
         <WaiterOrderContainer
-          key={order._id}
+          key={order.orderId}
           orderData={order}
           onUpdateStatus={updateOrderStatus}
         />

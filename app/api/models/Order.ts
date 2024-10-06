@@ -2,9 +2,6 @@ import mongoose, { Schema } from "mongoose";
 
 
 const orderSchema = new Schema({
-  _id: {
-    type: Schema.Types.ObjectId,
-  },
   orderId: {
     type: String,
     required: true,
@@ -24,23 +21,37 @@ const orderSchema = new Schema({
         type: String,
         required: true,
       },
-      foodName: {
+      name: {
         type: String,
         required: true,
-        modifications: String,
       },
       quantity: {
         type: Number,
         required: true,
         min: 1,
       },
-      modification: String 
+      modification: String,
+      price: {
+        type: Number,
+        required: true,
+        min: 0,
+      },
+      category: {
+        type: String,
+        required: true,
+        enum: ['food', 'drink', 'dessert'],
+      }
     },
   ],
   status: {
     type: String,
     required: true,
     enum: ['notYetOrdered', 'ordered', 'preparing', 'ready', 'served'],
+  },
+  payment: {
+    type: String,
+    required: true,
+    enum: ['paid', 'unpaid'],
   },
   timestamps: {
     orderedAt: {

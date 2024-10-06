@@ -1,23 +1,23 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import OrderContainer from "./OrderContainer";
+import OrderContainer, { OrderData } from "./OrderContainer";
 import { endpoints } from "@/app/api/endpoint";
 
-interface OrderData {
-  _id: string;
-  orderId: string;
-  sessionId: string;
-  tableNumber: string;
-  foodItems: {
-    foodId: string;
-    foodName: string;
-    quantity: number;
-    _id: string;
-  }[];
-  status: "ordered" | "preparing" | "ready";
-  timestamps: {
-    orderedAt: string;
-  };
-}
+// interface OrderData {
+//   _id: string;
+//   orderId: string;
+//   sessionId: string;
+//   tableNumber: string;
+//   foodItems: {
+//     foodId: string;
+//     foodName: string;
+//     quantity: number;
+//     _id: string;
+//   }[];
+//   status: "ordered" | "preparing" | "ready";
+//   timestamps: {
+//     orderedAt: string;
+//   };
+// }
 
 const OrdersManager: React.FC = () => {
   const [orders, setOrders] = useState<OrderData[]>([]);
@@ -25,7 +25,7 @@ const OrdersManager: React.FC = () => {
   const fetchOrders = useCallback(async () => {
     try {
       const response = await fetch(
-        `${endpoints.next_fullUrl}/api/orders/chefOrderlist`
+        `http://${endpoints.next_ip_port}/api/orders/chefOrderlist`
       );
       const newData = await response.json();
       if (Array.isArray(newData)) {
@@ -33,7 +33,7 @@ const OrdersManager: React.FC = () => {
 
         const updatedOrders = newData.map((newOrder) => {
           const existingOrder = ordersRef.current.find(
-            (order) => order._id === newOrder._id
+            (order) => order.orderId === newOrder.orderId
           );
           if (
             !existingOrder ||
@@ -76,7 +76,7 @@ const OrdersManager: React.FC = () => {
     ) => {
       try {
         const response = await fetch(
-          `${endpoints.next_fullUrl}/api/orders/updateOrderStatus`,
+          `http://${endpoints.next_ip_port}/api/orders/updateOrderStatus`,
           {
             method: "PUT",
             headers: {
@@ -110,7 +110,7 @@ const OrdersManager: React.FC = () => {
     <div className="flex flex-row flex-wrap gap-3">
       {orders.map((order) => (
         <OrderContainer
-          key={order._id}
+          key={order.orderId}
           orderData={order}
           onUpdateStatus={updateOrderStatus}
         />

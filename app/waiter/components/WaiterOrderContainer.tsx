@@ -58,23 +58,7 @@ import WaiterOrderList from "./WaiterOrderList";
 import WaiterButton from "./WaiterButton";
 import WaiterOrder from "./WaiterOrder";
 import { time } from "console";
-
-interface OrderData {
-  _id: string;
-  orderId: string;
-  sessionId: string;
-  tableNumber: string;
-  foodItems: {
-    foodId: string;
-    foodName: string;
-    quantity: number;
-    _id: string;
-  }[];
-  status: "ordered" | "preparing" | "ready" | "served";
-  timestamps: {
-    orderedAt: string;
-  };
-}
+import { OrderData } from "@/app/chef/components/OrderContainer";
 
 interface Props {
   orderData: OrderData;
@@ -127,8 +111,8 @@ const WaiterOrderContainer: React.FC<Props> = ({
       />
       {orderData.foodItems.map((item) => (
         <WaiterOrderList
-          key={item._id}
-          name={item.foodName}
+          key={item.foodId}
+          name={item.name}
           quantity={item.quantity}
           description=""
         />

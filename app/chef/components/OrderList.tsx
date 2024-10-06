@@ -2,10 +2,10 @@ import React from 'react'
 interface Props {
     quantity: number
     name: string
-    description: string
+    modification: string
 }
 
-const OrderList = ({ name, quantity, description }: Props) => {
+const OrderList = ({ name, quantity, modification }: Props) => {
     return (
         <>
             <div className='flex'>
@@ -20,7 +20,7 @@ const OrderList = ({ name, quantity, description }: Props) => {
                         {name}
                     </p>
                     <p>
-                        {description}
+                        {modification}
                     </p>
                 </div>
             </div>

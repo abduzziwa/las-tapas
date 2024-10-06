@@ -95,6 +95,7 @@ interface Props {
     quantity: number;
     foodPrice: number;
     modification: string;
+    category: string;
   }) => void; // Callback for adding meal to cart
 }
 
@@ -126,7 +127,8 @@ const MealPopup: React.FC<Props> = ({
       foodName: meal.name,
       foodPrice: meal.price,
       quantity,
-      modification: modification || "none", // Default to "none" if no modification is added
+      modification: modification || "none",
+      category: meal.category, // Default to "none" if no modification is added
     });
     onClose(); // Close the popup after adding to cart
   };
@@ -140,8 +142,8 @@ const MealPopup: React.FC<Props> = ({
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-white cursor-pointer"
-        >
-          <Image src={CloseIcon.src} alt="close-icon" width={16} height={16} />.
+        ><span className="hidden">Close popup</span>
+          <Image src={CloseIcon.src} alt="close-icon" width={16} height={16} />
         </button>
 
         {/* Meal Image and Details */}
@@ -189,14 +191,14 @@ const MealPopup: React.FC<Props> = ({
           <div className="flex items-center gap-4">
             <button
               onClick={handleDecreaseQuantity}
-              className="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center"
+              className="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center text-[22px] font-medium active:bg-gray-400  active:text-white transition-all"
             >
               -
             </button>
             <p className="text-white text-lg font-bold">x {quantity}</p>
             <button
               onClick={handleIncreaseQuantity}
-              className="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center"
+              className="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center align text-[22px] font-medium active:bg-gray-400  active:text-white transition-all"
             >
               +
             </button>

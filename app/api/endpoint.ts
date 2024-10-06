@@ -4,7 +4,6 @@
 import next from "next";
 
 export const endpoints = {
-    next_endpoint: "http://localhost",
-    next_port: 3000,
-    next_fullUrl: "http://localhost:3000",
+    next_ip_port: "localhost:3000",
+    next_localhost: "localhost:3000",
 }
