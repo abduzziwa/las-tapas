@@ -6,21 +6,20 @@ const tableSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  capacity: {
+  seats: {  // Changed from capacity to seats to match your document
     type: Number,
     required: true,
     min: 1,
   },
-  occupied: {
+  status: {  // Renamed from occupied to status
     type: String,
-    enum: ["available", "occupied"],
+    enum: ["available", "occupied"], // Status options
     default: "available",
   },
-  currentOrders: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: 'Order',
+  occupiedBy: {  // Added to track who occupies the table
+    type: String,
+    default: "none",  // Default value when table is not occupied
   },
 });
 
 export const Tables = mongoose.models.Tables || mongoose.model('Tables', tableSchema, 'tables');
-// export const Table =  mongoose.model('Table', tableSchema, 'tables');

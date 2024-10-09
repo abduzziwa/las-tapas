@@ -3,20 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -H 192.168.71.119",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
     "@next/font": "^14.2.8",
+    "cors": "^2.8.5",
     "mongoose": "^8.6.3",
     "next": "^14.2.9",
     "react": "^18",
     "react-dom": "^18",
+    "react-toastify": "^10.0.5",
     "swr": "^2.2.5"
   },
   "devDependencies": {
+    "@types/cookie": "^0.6.0",
+    "@types/cors": "^2.8.17",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

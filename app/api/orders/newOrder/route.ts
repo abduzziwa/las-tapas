@@ -1,49 +1,152 @@
-import { NextResponse } from 'next/server';
+// import { NextRequest, NextResponse } from 'next/server';
+// import connectToDatabase from '../../models/Connection';
+// import { Tables } from '../../models/tables';
+// import { Orders } from '../../models/Order';
+
+
+// export async function POST(request: NextRequest) {
+//   try {
+//     const { sessionId, tableNumber, foodItems } = await request.json();
+
+//     if (!sessionId || !tableNumber || !foodItems || !Array.isArray(foodItems)) {
+//       return NextResponse.json({ message: 'Invalid request body' }, { status: 400 });
+//     }
+
+//     await connectToDatabase();
+
+//     // Check if the table number and session ID match
+//     const table = await Tables.findOne({
+//       tableNumber: tableNumber,
+//       occupiedBy: sessionId,
+//       status: 'occupied'
+//     });
+
+//     if (!table) {
+//       return NextResponse.json({ message: 'Unauthorized: Invalid table number or session ID' }, { status: 403 });
+//     }
+
+//     // Generate new orderId
+//     const lastOrder = await Orders.findOne({}, { sort: { orderId: -1 } });
+//     let newOrderId;
+//     if (lastOrder && lastOrder.orderId) {
+//       const lastOrderNumber = parseInt(lastOrder.orderId);
+//       newOrderId = (lastOrderNumber + 1).toString();
+//     } else {
+//       newOrderId = '1';
+//     }
+
+//     // Create the order
+//     const order = {
+//       orderId: newOrderId,
+//       sessionId,
+//       tableNumber,
+//       foodItems,
+//       status: 'ordered',
+//       payment: 'unpaid',
+//       timestamps: {
+//         orderedAt: new Date()
+//       }
+//     };
+
+//     const newOrder = new Orders(order);
+//     const result = await newOrder.save();
+
+//     if (result) {
+//       return NextResponse.json({ message: 'Order created successfully', orderId: newOrderId }, { status: 201 });
+//     } else {
+//       return NextResponse.json({ message: 'Failed to create order' }, { status: 500 });
+//     }
+//   } catch (error) {
+//     console.error('Error processing order:', error);
+//     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+//   }
+// }
+import { NextRequest, NextResponse } from 'next/server';
 import connectToDatabase from '../../models/Connection';
+import { Tables } from '../../models/tables';
 import { Orders } from '../../models/Order';
-import mongoose from 'mongoose';
 
-export async function POST(req: Request) {
-    try {
-        await connectToDatabase();
+export async function POST(request: NextRequest) {
+  try {
+    // Parse request body
+    const { sessionId, tableNumber, foodItems } = await request.json();
 
-        const {
-            sessionId,
-            tableNumber,
-            foodItems,
-            status,
-        } = await req.json();
-
-        if (!sessionId || !tableNumber || !foodItems || !status) {
-            return NextResponse.json({ message: 'Missing required fields' }, { status: 400 });
-        }
-
-        if (status !== 'notYetOrdered') {
-            return NextResponse.json({ message: 'Invalid initial status' }, { status: 400 });
-        }
-
-        const lastOrder = await Orders.findOne().sort({ orderId: -1 }).limit(1);
-        const newOrderId = lastOrder ? `o${parseInt(lastOrder.orderId.slice(1)) + 1}` : 'o3';
-
-        const newOrder = new Orders({
-            _id: new mongoose.Types.ObjectId(), // Explicitly add _id
-            orderId: newOrderId,
-            sessionId,
-            tableNumber,
-            foodItems,
-            status: 'notYetOrdered',
-        });
-
-        newOrder.status = 'ordered';
-
-        await newOrder.save();
-
-        return NextResponse.json(newOrder, { status: 201 });
-    } catch (error) {
-        console.error('Detailed error:', error);
-        return NextResponse.json({ 
-            message: 'Error creating order', 
-            error: error instanceof Error ? error.message : String(error) 
-        }, { status: 500 });
+    // Validate request payload
+    if (!sessionId || !tableNumber || !foodItems || !Array.isArray(foodItems)) {
+      console.error('Invalid request body:', { sessionId, tableNumber, foodItems });
+      return NextResponse.json({ message: 'Invalid request body' }, { status: 400 });
     }
+
+    // Validate foodItems structure
+    const invalidFoodItems = foodItems.some(item =>
+      !item.foodId || !item.name || !item.quantity || !item.price || !item.category
+    );
+    if (invalidFoodItems) {
+      console.error('Invalid food items structure:', foodItems);
+      return NextResponse.json({ message: 'Each food item must have foodId, name, quantity, price and category' }, { status: 400 });
+    }
+
+    await connectToDatabase();
+
+    // Check if the table number and session ID match
+    const table = await Tables.findOne({
+      tableNumber,
+      occupiedBy: sessionId,
+      status: 'occupied'
+    });
+
+    if (!table) {
+      console.error('Unauthorized request: Invalid table number or session ID:', { tableNumber, sessionId });
+      return NextResponse.json({ message: 'Unauthorized: Invalid table number or session ID' }, { status: 403 });
+    }
+
+    // Generate new orderId
+    const lastOrder = await Orders.findOne({}, {}, { sort: { orderId: -1 } });
+    let newOrderId;
+    if (lastOrder && lastOrder.orderId) {
+      const lastOrderNumber = parseInt(lastOrder.orderId);
+      newOrderId = (lastOrderNumber + 1).toString();
+    } else {
+      newOrderId = '1';
+    }
+
+    // Create the order object
+    const order = {
+      orderId: newOrderId,
+      sessionId,
+      tableNumber,
+      foodItems,  // Make sure foodItems is passed directly without modification
+      status: 'ordered',
+      payment: 'unpaid',
+      timestamps: {
+        orderedAt: new Date(),
+      },
+    };
+
+    // Create a new order document
+    const newOrder = new Orders(order);
+
+    // Validate the order before saving
+    try {
+      await newOrder.validate();  // This will trigger any schema validation errors
+    } catch (validationError) {
+      console.error('Order validation failed:', validationError);
+      return NextResponse.json({ message: 'Order validation failed', error: validationError }, { status: 400 });
+    }
+
+    // Save the order to the database
+    const result = await newOrder.save();
+
+    // Respond with success
+    if (result) {
+      console.log('Order created successfully:', result);
+      return NextResponse.json({ message: 'Order created successfully', orderId: newOrderId }, { status: 201 });
+    } else {
+      console.error('Failed to create order:', result);
+      return NextResponse.json({ message: 'Failed to create order' }, { status: 500 });
+    }
+  } catch (error) {
+    console.error('Error processing order:', error);
+    return NextResponse.json({ message: 'Internal Server Error', error: (error as Error).message }, { status: 500 });
+  }
 }

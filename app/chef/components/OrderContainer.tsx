@@ -58,16 +58,16 @@ import Button from "./Button";
 import Order from "./Order";
 import OrderList from "./OrderList";
 
-interface OrderData {
-  _id: string;
+export interface OrderData {
   orderId: string;
   sessionId: string;
   tableNumber: string;
   foodItems: {
     foodId: string;
-    foodName: string;
+    name: string;
     quantity: number;
-    _id: string;
+    category: string;
+    modification: string;
   }[];
   status: "ordered" | "preparing" | "ready";
   timestamps: {
@@ -129,10 +129,9 @@ const OrderContainer: React.FC<Props> = ({ orderData, onUpdateStatus }) => {
       />
       {orderData.foodItems.map((item) => (
         <OrderList
-          key={item._id}
-          name={item.foodName}
+          name={item.name}
           quantity={item.quantity}
-          description="" // Add description if available in your data
+          modification={item.modification} // Add description if available in your data
         />
       ))}
       <Button
