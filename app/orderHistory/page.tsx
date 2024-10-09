@@ -152,6 +152,7 @@
 import React, { useState, useEffect } from "react";
 import TopNavBar from "../components/TopNavBar";
 import BottomNavBar from "../components/BottomNavBar";
+import { endpoints } from "../api/endpoint";
 
 interface FoodItem {
   foodId: string;
@@ -183,12 +184,14 @@ export default function OrderHistory() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
+        // const sessionId = sessionStorage.getItem("sessionId");
         const sessionId = sessionStorage.getItem("sessionId");
+
         if (!sessionId) {
           throw new Error("No session ID found");
         }
         const response = await fetch(
-          `http://localhost:3000/api/orders/clientOrderlistOrdered?sessionId=${sessionId}`
+          `http://${endpoints.next_ip_port}/api/orders/clientOrderlistOrdered?sessionId=${sessionId}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch orders");

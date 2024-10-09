@@ -285,7 +285,7 @@ export default function Bill() {
     setSubmitError(null);
 
     const sessionId = sessionStorage.getItem("sessionId");
-    const tableNumber = sessionStorage.getItem("TableNumber");
+    const tableNumber = sessionStorage.getItem("tableNumber");
 
     if (!sessionId || !tableNumber) {
       setSubmitError("Session information is missing. Please try again.");
