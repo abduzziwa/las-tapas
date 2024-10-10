@@ -78,7 +78,7 @@
 // }
 
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import TopNavBar from "./components/TopNavBar";
 import BottomNavBar from "./components/BottomNavBar";
 import Carousel from "./components/Carousel";
@@ -86,11 +86,11 @@ import foodImage from "../public/food.png";
 import dessertsImage from "../public/desserts.png";
 import drinksImage from "../public/drinks.png";
 import Link from "next/link";
-import { endpoints } from "./api/endpoint";
 
 const images = [foodImage.src, dessertsImage.src, drinksImage.src];
 
 export default function Home() {
+  const [isAuthorized, setIsAuthorized] = useState(false);
   useEffect(() => {
     const { searchParams } = new URL(window.location.href);
     const sessionId = searchParams.get("sessionId");
@@ -103,8 +103,21 @@ export default function Home() {
     if (sessionId && tableNumber) {
       sessionStorage.setItem("sessionId", sessionId);
       sessionStorage.setItem("tableNumber", tableNumber);
+      setIsAuthorized(true);
+    } else {
+      setIsAuthorized(false);
     }
   }, []);
+
+  if (!isAuthorized) {
+    return (
+      <div className="flex justify-center items-center h-screen flex-col">
+        <p className="text-4xl text-center text-red-600">Unauthorized Acess</p>
+        <p className="mt-11 font-bold text-2xl">Please scan the QRCODE</p>
+        <p className="mt-2 font-bold text-2xl">On your table</p>
+      </div>
+    );
+  }
   return (
     <main>
       <TopNavBar />
