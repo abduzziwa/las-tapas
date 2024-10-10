@@ -78,7 +78,7 @@
 // }
 
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import TopNavBar from "./components/TopNavBar";
 import BottomNavBar from "./components/BottomNavBar";
 import Carousel from "./components/Carousel";
@@ -91,6 +91,8 @@ import { endpoints } from "./api/endpoint";
 const images = [foodImage.src, dessertsImage.src, drinksImage.src];
 
 export default function Home() {
+  const [isAuthorized, setIsAuthorized] = useState(false);
+
   useEffect(() => {
     const { searchParams } = new URL(window.location.href);
     const sessionId = searchParams.get("sessionId");
@@ -103,8 +105,24 @@ export default function Home() {
     if (sessionId && tableNumber) {
       sessionStorage.setItem("sessionId", sessionId);
       sessionStorage.setItem("tableNumber", tableNumber);
+      setIsAuthorized(true);
+    } else {
+      setIsAuthorized(false);
     }
   }, []);
+
+  if (!isAuthorized) {
+    // Show an "Access Denied" or "Loading" message when unauthorized
+    return (
+      <div className="text-red-500 mt-[5rem] ml-[1rem] flex h-[100vh] flex-col space-y-10">
+        <h1 className="text-2xl">Access Denied! </h1>
+
+        <p>
+          Wrong Acess Please scan the <span>QRCODE</span> on the table
+        </p>
+      </div>
+    );
+  }
 
   return (
     <main>
