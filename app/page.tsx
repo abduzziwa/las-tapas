@@ -104,8 +104,6 @@ export default function Home() {
       sessionStorage.setItem("sessionId", sessionId);
       sessionStorage.setItem("tableNumber", tableNumber);
       setIsAuthorized(true);
-    } else {
-      setIsAuthorized(false);
     }
   }, []);
 
