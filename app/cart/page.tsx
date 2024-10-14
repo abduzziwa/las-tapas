@@ -220,6 +220,7 @@ import "react-toastify/dist/ReactToastify.css";
 import TopNavBar from "../components/TopNavBar";
 import BottomNavBar from "../components/BottomNavBar"; // Import the modal
 import ConfirmationModal from "../components/ConfirmationModel";
+import AuthGuard from "../components/AuthGuard";
 
 interface CartItem {
   foodId: string;
@@ -344,87 +345,95 @@ export default function Bill() {
   };
 
   return (
-    <main className="flex flex-col min-h-screen">
-      <TopNavBar />
-      <ToastContainer position="top-center" autoClose={3000} hideProgressBar />
+    <AuthGuard>
+      <main className="flex flex-col min-h-screen">
+        <TopNavBar />
+        <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          hideProgressBar
+        />
 
-      <ConfirmationModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onConfirm={handleConfirmSubmit}
-      />
+        <ConfirmationModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onConfirm={handleConfirmSubmit}
+        />
 
-      <div className="flex-grow p-4">
-        <h1 className="text-2xl font-bold mb-4">Your Order</h1>
-        {cartItems.length > 0 ? (
-          <div className="bg-white shadow-md rounded-lg overflow-hidden">
-            <ul className="divide-y divide-gray-200">
-              {cartItems.map((item, index) => (
-                <li
-                  key={index}
-                  className="p-4 flex justify-between items-center"
-                >
-                  <div>
-                    <h3 className="text-lg font-semibold">{item.name}</h3>
-                    <p className="text-gray-600">Quantity: {item.quantity}</p>
-                    {item.modification !== "none" && (
-                      <p className="text-sm text-gray-500">
-                        Note: {item.modification}
+        <div className="flex-grow p-4">
+          <h1 className="text-2xl font-bold mb-4">Your Order</h1>
+          {cartItems.length > 0 ? (
+            <div className="bg-white shadow-md rounded-lg overflow-hidden">
+              <ul className="divide-y divide-gray-200">
+                {cartItems.map((item, index) => (
+                  <li
+                    key={index}
+                    className="p-4 flex justify-between items-center"
+                  >
+                    <div>
+                      <h3 className="text-lg font-semibold">{item.name}</h3>
+                      <p className="text-gray-600">Quantity: {item.quantity}</p>
+                      {item.modification !== "none" && (
+                        <p className="text-sm text-gray-500">
+                          Note: {item.modification}
+                        </p>
+                      )}
+                      <div className="flex items-center gap-2 mt-2">
+                        <button
+                          className="bg-gray-300 text-gray-800 py-1 px-2 rounded"
+                          onClick={() => decreaseQuantity(item.foodId)}
+                        >
+                          -
+                        </button>
+                        <span>{item.quantity}</span>
+                        <button
+                          className="bg-gray-300 text-gray-800 py-1 px-2 rounded"
+                          onClick={() => increaseQuantity(item.foodId)}
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-lg font-semibold">
+                        €{(item.price * item.quantity).toFixed(2)}
                       </p>
-                    )}
-                    <div className="flex items-center gap-2 mt-2">
+                      <p className="text-sm text-gray-500">
+                        €{item.price} each
+                      </p>
                       <button
-                        className="bg-gray-300 text-gray-800 py-1 px-2 rounded"
-                        onClick={() => decreaseQuantity(item.foodId)}
+                        className="text-red-600 mt-2 text-sm"
+                        onClick={() => removeItem(item.foodId)}
                       >
-                        -
-                      </button>
-                      <span>{item.quantity}</span>
-                      <button
-                        className="bg-gray-300 text-gray-800 py-1 px-2 rounded"
-                        onClick={() => increaseQuantity(item.foodId)}
-                      >
-                        +
+                        Remove
                       </button>
                     </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-lg font-semibold">
-                      €{(item.price * item.quantity).toFixed(2)}
-                    </p>
-                    <p className="text-sm text-gray-500">€{item.price} each</p>
-                    <button
-                      className="text-red-600 mt-2 text-sm"
-                      onClick={() => removeItem(item.foodId)}
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-            <div className="p-4 bg-gray-50">
-              <div className="flex justify-between items-center mb-4">
-                <span className="text-xl font-bold">Total:</span>
-                <span className="text-xl font-bold">€{calculateTotal()}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="p-4 bg-gray-50">
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-xl font-bold">Total:</span>
+                  <span className="text-xl font-bold">€{calculateTotal()}</span>
+                </div>
+                <button
+                  className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 disabled:bg-gray-400"
+                  onClick={() => setIsModalOpen(true)} // Open the modal
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Submitting..." : "Submit Order"}
+                </button>
+                {submitError && (
+                  <p className="text-red-500 mt-2">{submitError}</p>
+                )}
               </div>
-              <button
-                className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 disabled:bg-gray-400"
-                onClick={() => setIsModalOpen(true)} // Open the modal
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "Submitting..." : "Submit Order"}
-              </button>
-              {submitError && (
-                <p className="text-red-500 mt-2">{submitError}</p>
-              )}
             </div>
-          </div>
-        ) : (
-          <p className="text-center text-gray-500">Your cart is empty</p>
-        )}
-      </div>
-      <BottomNavBar />
-    </main>
+          ) : (
+            <p className="text-center text-gray-500">Your cart is empty</p>
+          )}
+        </div>
+        <BottomNavBar />
+      </main>
+    </AuthGuard>
   );
 }

@@ -69,6 +69,7 @@ import TopNavBar from "../components/TopNavBar";
 import BottomNavBar from "../components/BottomNavBar";
 import DropDownArrow from "../../public/dropdownarrow.svg";
 import Image from "next/image";
+import AuthGuard from "../components/AuthGuard";
 
 interface BillItem {
   foodId: string;
@@ -164,26 +165,28 @@ export default function Bill() {
   );
 
   return (
-    <main className="flex flex-col min-h-screen">
-      <TopNavBar />
-      <div className="flex flex-col items-center justify-center w-full flex-grow px-[14px] py-[24px] gap-[14px]">
-        <h1 className="leading-tight text-[24px]">Bill</h1>
+    <AuthGuard>
+      <main className="flex flex-col min-h-screen">
+        <TopNavBar />
+        <div className="flex flex-col items-center justify-center w-full flex-grow px-[14px] py-[24px] gap-[14px]">
+          <h1 className="leading-tight text-[24px]">Bill</h1>
 
-        {renderCategorySection("food", totalFood)}
-        {renderCategorySection("drink", totalDrinks)}
-        {renderCategorySection("dessert", totalDesserts)}
+          {renderCategorySection("food", totalFood)}
+          {renderCategorySection("drink", totalDrinks)}
+          {renderCategorySection("dessert", totalDesserts)}
 
-        <div className="flex w-full justify-end items-center gap-[6px]">
-          <p>Total:</p>
-          <p>€{grandTotal}</p>
+          <div className="flex w-full justify-end items-center gap-[6px]">
+            <p>Total:</p>
+            <p>€{grandTotal}</p>
+          </div>
+          <div>
+            <button className="flex py-[12px] px-[14px] bg-main rounded-full text-white">
+              Or ask a waiter to pay cash
+            </button>
+          </div>
         </div>
-        <div>
-          <button className="flex py-[12px] px-[14px] bg-main rounded-full text-white">
-            Or ask a waiter to pay cash
-          </button>
-        </div>
-      </div>
-      <BottomNavBar />
-    </main>
+        <BottomNavBar />
+      </main>
+    </AuthGuard>
   );
 }

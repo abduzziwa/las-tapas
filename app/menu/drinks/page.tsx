@@ -168,6 +168,7 @@ import BottomNavBar from "../../components/BottomNavBar";
 import MealComponent from "../../components/MealComponent";
 import MealPopup from "@/app/components/MealPopup";
 import { endpoints } from "@/app/api/endpoint";
+import AuthGuard from "@/app/components/AuthGuard";
 
 export interface Meal {
   foodId: string;
@@ -274,52 +275,53 @@ export default function Foods() {
   };
 
   return (
-    <main>
-      <TopNavBar />
+    <AuthGuard>
+      <main>
+        <TopNavBar />
 
-      <div className="flex flex-col w-full items-center p-[24px] gap-[10px]">
-        <div className="flex items-end w-full h-[155px] rounded-[20px] py-[10px] px-[16px] drop-shadow-lg bg-[url('../public/drinks.png')] bg-cover bg-center">
-          <p className="text-white text-[28px] font-bold drop-shadow-lg leading-tight">
-            Drinks
-          </p>
+        <div className="flex flex-col w-full items-center p-[24px] gap-[10px]">
+          <div className="flex items-end w-full h-[155px] rounded-[20px] py-[10px] px-[16px] drop-shadow-lg bg-[url('../public/drinks.png')] bg-cover bg-center">
+            <p className="text-white text-[28px] font-bold drop-shadow-lg leading-tight">
+              Drinks
+            </p>
+          </div>
         </div>
-      </div>
 
-      {/* Loading state while fetching meals */}
-      {isLoading ? (
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
-        </div>
-      ) : (
-        <div className="flex flex-wrap justify-between gap-4 p-[24px]">
-          {meals.map((meal) => (
-            <div
-              className="flex-1 min-w-[9.85rem] max-w-[calc(50%-1rem)]"
-              key={meal.foodId}
-            >
-              <MealComponent
-                meal={meal}
-                onMealClick={() => handleMealClick(meal)}
-              />
-            </div>
-          ))}
-        </div>
-      )}
+        {/* Loading state while fetching meals */}
+        {isLoading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+          </div>
+        ) : (
+          <div className="flex flex-wrap justify-between gap-4 p-[24px]">
+            {meals.map((meal) => (
+              <div
+                className="flex-1 min-w-[9.85rem] max-w-[calc(50%-1rem)]"
+                key={meal.foodId}
+              >
+                <MealComponent
+                  meal={meal}
+                  onMealClick={() => handleMealClick(meal)}
+                />
+              </div>
+            ))}
+          </div>
+        )}
 
-      {/* Popup for selected meal */}
-      {selectedMeal && (
-        <MealPopup
-          visibility={isPopupVisible ? "" : "hidden"}
-          onClose={handleClosePopup}
-          meal={selectedMeal}
-          onAddToCart={handleAddToCart}
-        />
-      )}
+        {/* Popup for selected meal */}
+        {selectedMeal && (
+          <MealPopup
+            visibility={isPopupVisible ? "" : "hidden"}
+            onClose={handleClosePopup}
+            meal={selectedMeal}
+            onAddToCart={handleAddToCart}
+          />
+        )}
 
-      <BottomNavBar />
+        <BottomNavBar />
 
-      {/* Display current cart items */}
-      {/* <div className="order-summary p-[24px]">
+        {/* Display current cart items */}
+        {/* <div className="order-summary p-[24px]">
         {cartItems.length > 0 ? (
           cartItems.map((item, index) => (
             <div key={index} className="order-item mb-2">
@@ -338,6 +340,7 @@ export default function Foods() {
           <p>No items in the cart.</p>
         )}
       </div> */}
-    </main>
+      </main>
+    </AuthGuard>
   );
 }
