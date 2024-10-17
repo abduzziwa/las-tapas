@@ -252,6 +252,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { endpoints } from "@/app/api/endpoint";
 
 const MenuItems = () => {
   interface MenuItem {
@@ -328,7 +329,9 @@ const MenuItems = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const url = editingItem ? `/api/menu/${editingItem.foodId}` : "/api/menu";
+      const url = editingItem
+        ? `http://${endpoints.next_ip_port}/api/menu/${editingItem.foodId}`
+        : "/api/menu";
       const method = editingItem ? "PUT" : "POST";
       const response = await fetch(url, {
         method,
@@ -352,9 +355,12 @@ const MenuItems = () => {
 
   const handleDelete = async (foodId: string) => {
     try {
-      const response = await fetch(`/api/menu/${foodId}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://${endpoints.next_ip_port}/api/menu/${foodId}`,
+        {
+          method: "DELETE",
+        }
+      );
       if (!response.ok) throw new Error("Failed to delete menu item");
       fetchMenuItems();
     } catch (error) {
