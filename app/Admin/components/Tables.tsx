@@ -26,6 +26,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { endpoints } from "@/app/api/endpoint";
 
 const Tables = () => {
   const [tables, setTables] = useState<
@@ -73,8 +74,8 @@ const Tables = () => {
     e.preventDefault();
     try {
       const url = editingTable
-        ? `/api/tables/${editingTable.tableNumber}`
-        : "/api/tables";
+        ? `http://${endpoints.next_ip_port}/api/tables/${editingTable.tableNumber}`
+        : `http://${endpoints.next_ip_port}/api/tables`;
       const method = editingTable ? "PUT" : "POST";
       const response = await fetch(url, {
         method,
