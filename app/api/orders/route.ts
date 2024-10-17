@@ -20,7 +20,7 @@ export async function GET(req: Request) {
             }
         } else {
             // Geen id ( Alle data)
-            result = await Orders.find({ status: { $ne: 'ready' } });
+            result = await Orders.find({ status: { $ne: 'notYetOrdered' } });
         }
 
         return NextResponse.json(result, { status: 200 });
