@@ -18,7 +18,7 @@ export default function BottomNavBar() {
 
   return (
     <div className="flex w-full h-fit px-[10px] py-[8px] fixed bottom-0 left-0 right-0 ">
-      <div className="flex flex-row flex-1 justify-between px-[26px] py-[12px] bg-gradient-to-tr from-main to-gradientEnd drop-shadow-lg rounded-full">
+      <div className="flex flex-row flex-1 justify-between px-[26px] py-[12px] bg-custom-gradient drop-shadow-lg rounded-full">
         <Link href="/">
           {currentPath === "/" ? (
             <img src={homeIconActive.src} alt="Home Icon" />

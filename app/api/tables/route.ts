@@ -1,6 +1,6 @@
 import connectToDatabase from "../models/Connection";
 import { NextResponse } from "next/server";
-import { Tables } from "../models/tables";
+import { Tables } from "../models/Tables";
 
 export async function GET(){
     try {
