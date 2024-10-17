@@ -19,11 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-<<<<<<< HEAD
       <body className={comfortaa.className}>{children}</body>
-=======
-      <body className={confortaa.className}>{children}</body>
->>>>>>> A
     </html>
   );
 }
