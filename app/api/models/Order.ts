@@ -51,7 +51,7 @@ const orderSchema = new Schema({
   payment: {
     type: String,
     required: true,
-    enum: ['paid', 'unpaid'],
+    enum: ['paid', 'unpaid', 'wantToPay'],
   },
   timestamps: {
     orderedAt: {

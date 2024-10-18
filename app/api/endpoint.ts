@@ -4,7 +4,7 @@
 import next from "next";
 
 export const endpoints = {
-    next_ip_port: "localhost:3000",
+    next_ip_port: "10.0.8.84:3000",
     next_localhost: "localhost:3000",
     next_home: "http://10.0.8.105:3000",
 }
