@@ -238,12 +238,12 @@ const Tables = () => {
                 <TableCell>{table.tableNumber}</TableCell>
                 <TableCell>{table.seats}</TableCell>
                 <TableCell>
-                <StatusBadge
-                  status={table.status as StatusBadgeProps["status"]}
-                >
-                  {table.status}
-                </StatusBadge>
-              </TableCell>
+                  <StatusBadge
+                    status={table.status as StatusBadgeProps["status"]}
+                  >
+                    {table.status}
+                  </StatusBadge>
+                </TableCell>
                 <TableCell>{table.occupiedBy}</TableCell>
                 <TableCell>
                   <Button
