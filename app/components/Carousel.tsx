@@ -42,7 +42,8 @@ const Carousel: React.FC<CarouselProps> = ({ images }) => {
       </button>
 
       {/* Carousel images */}
-      <Link href="/menu/deals-of-the-week"
+      <Link
+        href="/menu/deals-of-the-week"
         className="flex transition-transform duration-500 ease-in-out"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >

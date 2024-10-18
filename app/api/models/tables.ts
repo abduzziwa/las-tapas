@@ -13,7 +13,7 @@ const tableSchema = new mongoose.Schema({
   },
   status: {  // Renamed from occupied to status
     type: String,
-    enum: ["available", "occupied"], // Status options
+    enum: ["available", "occupied", "booked"], // Status options
     default: "available",
   },
   occupiedBy: {  // Added to track who occupies the table

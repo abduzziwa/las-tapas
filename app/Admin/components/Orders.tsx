@@ -183,7 +183,7 @@ import {
 import { endpoints } from "@/app/api/endpoint";
 import { Badge } from "@/components/ui/badge";
 import GreenBadge from "./GreenBadge";
-import StatusBadge from "./StatusBadge";
+import StatusBadge, { StatusBadgeProps } from "./StatusBadge";
 
 interface FoodItem {
   foodId: string;
@@ -214,7 +214,7 @@ const Orders = () => {
 
   useEffect(() => {
     fetchOrders();
-    const interval = setInterval(fetchOrders, 1000); // Fetch every 10 seconds (1000 ms)
+    const interval = setInterval(fetchOrders, 10000); // Fetch every 10 seconds (1000 ms)
     return () => clearInterval(interval);
   }, []);
 
@@ -294,11 +294,11 @@ const Orders = () => {
                 <StatusBadge status={order.status}>{order.status}</StatusBadge>
               </TableCell>
               <TableCell>
-                {order.payment === "paid" ? (
-                  <GreenBadge>{order.payment}</GreenBadge>
-                ) : (
-                  <Badge variant="destructive">{order.payment}</Badge>
-                )}
+                <StatusBadge
+                  status={order.payment as StatusBadgeProps["status"]}
+                >
+                  {order.payment}
+                </StatusBadge>
               </TableCell>
             </TableRow>
           ))}

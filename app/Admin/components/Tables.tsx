@@ -236,6 +236,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { endpoints } from "@/app/api/endpoint";
+import StatusBadge, { StatusBadgeProps } from "./StatusBadge";
 
 const Tables = () => {
   const [tables, setTables] = useState<
@@ -313,9 +314,12 @@ const Tables = () => {
 
   const handleDelete = async (tableNumber: string) => {
     try {
-      const response = await fetch(`/api/tables/${tableNumber}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://${endpoints.next_ip_port}/api/tables/${tableNumber}`,
+        {
+          method: "DELETE",
+        }
+      );
       if (!response.ok) throw new Error("Failed to delete table");
       fetchTables();
     } catch (error) {
@@ -395,6 +399,7 @@ const Tables = () => {
                   <SelectContent>
                     <SelectItem value="available">Available</SelectItem>
                     <SelectItem value="occupied">Occupied</SelectItem>
+                    <SelectItem value="booked">booked</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -434,7 +439,13 @@ const Tables = () => {
             <TableRow key={table.tableNumber}>
               <TableCell>{table.tableNumber}</TableCell>
               <TableCell>{table.seats}</TableCell>
-              <TableCell>{table.status}</TableCell>
+              <TableCell>
+                <StatusBadge
+                  status={table.status as StatusBadgeProps["status"]}
+                >
+                  {table.status}
+                </StatusBadge>
+              </TableCell>
               <TableCell>{table.occupiedBy}</TableCell>
               <TableCell>
                 <Button

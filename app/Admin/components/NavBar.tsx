@@ -111,7 +111,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, Menu } from "lucide-react";
 
-const NavBar = ({ setSelectedComponent }) => {
+interface NavBarProps {
+  setSelectedComponent: (component: string) => void;
+}
+
+const NavBar: React.FC<NavBarProps> = ({ setSelectedComponent }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
