@@ -1,9 +1,11 @@
+import { endpoints } from "@/app/api/endpoint";
+
 export const handleAction = async (action: string, payload: any, setError: (message: string | null) => void) => {
     console.log(`Action: ${action} with payload:`, payload);
 
     try {
         // Check if the employee exists
-        const employeeResponse = await fetch(`/api/checkEmployee`, {
+        const employeeResponse = await fetch(`http://${endpoints.next_ip_port}/api/checkEmployee`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -17,7 +19,7 @@ export const handleAction = async (action: string, payload: any, setError: (mess
             return;
         }
 
-        const response = await fetch(`/api/${action}`, {
+        const response = await fetch(`http://${endpoints.next_ip_port}/api/${action}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

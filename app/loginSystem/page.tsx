@@ -127,6 +127,7 @@ const Login: React.FC = () => {
     return (
         <div className='flex flex-col h-[100vh]'>
             <TopNavBar showSearch={false} />
+            ={false}
             <div className="flex flex-col items-center justify-center h-full ">
                 <AnimatePresence>
                     {errorMessage && (
