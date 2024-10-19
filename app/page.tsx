@@ -86,6 +86,7 @@ import foodImage from "../public/food.png";
 import dessertsImage from "../public/desserts.png";
 import drinksImage from "../public/drinks.png";
 import Link from "next/link";
+import "./globals.css";
 
 const images = [foodImage.src, dessertsImage.src, drinksImage.src];
 
