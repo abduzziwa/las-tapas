@@ -284,7 +284,7 @@ const Tables = () => {
     e.preventDefault();
     try {
       const url = editingTable
-        ? `http://${endpoints.next_ip_port}/api/tables/${editingTable.tableNumber}`
+        ? `http://${endpoints.next_ip_port}/api/tables?tableNumber=${editingTable.tableNumber}`
         : `http://${endpoints.next_ip_port}/api/tables`;
       const method = editingTable ? "PUT" : "POST";
       const response = await fetch(url, {
@@ -315,7 +315,7 @@ const Tables = () => {
   const handleDelete = async (tableNumber: string) => {
     try {
       const response = await fetch(
-        `http://${endpoints.next_ip_port}/api/tables/${tableNumber}`,
+        `http://${endpoints.next_ip_port}/api/tables?tableNumber=${tableNumber}`,
         {
           method: "DELETE",
         }
