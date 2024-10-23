@@ -212,6 +212,7 @@ import { PlusCircle, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
 import {
   Select,
   SelectContent,
@@ -239,6 +240,7 @@ import { endpoints } from "@/app/api/endpoint";
 import StatusBadge, { StatusBadgeProps } from "./StatusBadge";
 
 const Tables = () => {
+  const { toast } = useToast();
   const [tables, setTables] = useState<
     { tableNumber: string; seats: string; status: string; occupiedBy: string }[]
   >([]);
@@ -268,6 +270,10 @@ const Tables = () => {
       setTables(data);
     } catch (error) {
       console.error("Error fetching tables:", error);
+      toast({
+        title: "Scheduled: Catch up",
+        description: "Friday, February 10, 2023 at 5:57 PM",
+      });
     }
   };
 
@@ -292,10 +298,21 @@ const Tables = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-      if (!response.ok) throw new Error("Failed to save table");
+      if (!response.ok) {
+        toast({
+          title: "OOPS!!🤷‍♂️🤷‍♂️",
+          description: "Failed. Something went wrong",
+        });
+        setIsModalOpen(false);
+        throw new Error("Failed to save table");
+      }
       fetchTables();
       setIsModalOpen(false);
       resetForm();
+      toast({
+        title: "Sucess😎😎",
+        description: "Operation completed successfully",
+      });
     } catch (error) {
       console.error("Error saving table:", error);
     }

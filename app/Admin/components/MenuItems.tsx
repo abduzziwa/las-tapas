@@ -30,8 +30,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { endpoints } from "@/app/api/endpoint";
+import { useToast } from "@/hooks/use-toast";
 
 const MenuItems = () => {
+  const { toast } = useToast();
   interface MenuItem {
     foodId: string;
     name: string;
@@ -70,10 +72,20 @@ const MenuItems = () => {
   const fetchMenuItems = async () => {
     try {
       const response = await fetch("/api/menu");
-      if (!response.ok) throw new Error("Failed to fetch menu items");
+      if (!response.ok) {
+        toast({
+          title: "OOPS!!🤷‍♂️🤷‍♂️",
+          description: "Failed. Something went wrong",
+        });
+        throw new Error("Failed to fetch menu items");
+      }
       const data = await response.json();
       setMenuItems(data);
     } catch (error) {
+      toast({
+        title: "OOPS!!🤷‍♂️🤷‍♂️",
+        description: "Failed. Something went wrong",
+      });
       console.error("Error fetching menu items:", error);
     }
   };
@@ -115,11 +127,25 @@ const MenuItems = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-      if (!response.ok) throw new Error("Failed to save menu item");
+      if (!response.ok) {
+        toast({
+          title: "OOPS!!🤷‍♂️🤷‍♂️",
+          description: "Failed. Something went wrong",
+        });
+        throw new Error("Failed to save menu item");
+      }
+      toast({
+        title: "Success!🎉🎉",
+        description: "Operation completed successfully",
+      });
       fetchMenuItems();
       setIsModalOpen(false);
       resetForm();
     } catch (error) {
+      toast({
+        title: "OOPS!!🤷‍♂️🤷‍♂️",
+        description: "Failed. Something went wrong",
+      });
       console.error("Error saving menu item:", error);
     }
   };
@@ -138,9 +164,23 @@ const MenuItems = () => {
           method: "DELETE",
         }
       );
-      if (!response.ok) throw new Error("Failed to delete menu item");
+      if (!response.ok) {
+        toast({
+          title: "OOPS!!🤷‍♂️🤷‍♂️",
+          description: "Failed. Something went wrong",
+        });
+        throw new Error("Failed to delete menu item");
+      }
+      toast({
+        title: "Success!🎉🎉",
+        description: "Operation completed successfully",
+      });
       fetchMenuItems();
     } catch (error) {
+      toast({
+        title: "OOPS!!🤷‍♂️🤷‍♂️",
+        description: "Failed. Something went wrong",
+      });
       console.error("Error deleting menu item:", error);
     }
   };
