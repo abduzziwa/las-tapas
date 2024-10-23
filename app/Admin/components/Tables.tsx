@@ -265,15 +265,31 @@ const Tables = () => {
   const fetchTables = async () => {
     try {
       const response = await fetch("/api/tables");
-      if (!response.ok) throw new Error("Failed to fetch tables");
+      if (!response.ok) {
+        toast({
+          title: "OOPS!!🤦‍♂️🤦‍♂️",
+          description: "Failed. Something went wrong",
+          style: { backgroundColor: "#ffcccc", color: "black" },
+        });
+        setIsModalOpen(false);
+        throw new Error("Failed to fetch tables");
+      }
+
       const data = await response.json();
       setTables(data);
+      toast({
+        title: "Success!🎉🎉",
+        description: "Operation completed successfully",
+        style: { backgroundColor: "green", color: "white" },
+      });
     } catch (error) {
       console.error("Error fetching tables:", error);
       toast({
-        title: "Scheduled: Catch up",
-        description: "Friday, February 10, 2023 at 5:57 PM",
+        title: "OOPS!!🤦‍♂️🤦‍♂️",
+        description: "Failed. Something went wrong",
+        style: { backgroundColor: "#ffcccc", color: "black" },
       });
+      setIsModalOpen(false);
     }
   };
 
@@ -300,8 +316,9 @@ const Tables = () => {
       });
       if (!response.ok) {
         toast({
-          title: "OOPS!!🤷‍♂️🤷‍♂️",
+          title: "OOPS!!🤦‍♂️🤦‍♂️",
           description: "Failed. Something went wrong",
+          style: { backgroundColor: "#ffcccc", color: "black" },
         });
         setIsModalOpen(false);
         throw new Error("Failed to save table");
@@ -314,6 +331,12 @@ const Tables = () => {
         description: "Operation completed successfully",
       });
     } catch (error) {
+      toast({
+        title: "OOPS!!🤦‍♂️🤦‍♂️",
+        description: "Failed. Something went wrong",
+        style: { backgroundColor: "#ffcccc", color: "black" },
+      });
+      setIsModalOpen(false);
       console.error("Error saving table:", error);
     }
   };
@@ -337,9 +360,23 @@ const Tables = () => {
           method: "DELETE",
         }
       );
-      if (!response.ok) throw new Error("Failed to delete table");
+      if (!response.ok) {
+        toast({
+          title: "OOPS!!🤦‍♂️🤦‍♂️",
+          description: "Failed. Something went wrong",
+          style: { backgroundColor: "#ffcccc", color: "black" },
+        });
+        setIsModalOpen(false);
+        throw new Error("Failed to delete table");
+      }
       fetchTables();
     } catch (error) {
+      toast({
+        title: "OOPS!!🤦‍♂️🤦‍♂️",
+        description: "Failed. Something went wrong",
+        style: { backgroundColor: "#ffcccc", color: "black" },
+      });
+      setIsModalOpen(false);
       console.error("Error deleting table:", error);
     }
   };

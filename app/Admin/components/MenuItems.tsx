@@ -129,23 +129,28 @@ const MenuItems = () => {
       });
       if (!response.ok) {
         toast({
-          title: "OOPS!!🤷‍♂️🤷‍♂️",
+          title: "OOPS!!🤦‍♂️🤦‍♂️",
           description: "Failed. Something went wrong",
+          style: { backgroundColor: "#ffcccc", color: "black" },
         });
+        setIsModalOpen(false);
         throw new Error("Failed to save menu item");
       }
       toast({
         title: "Success!🎉🎉",
         description: "Operation completed successfully",
+        style: { backgroundColor: "green", color: "white" },
       });
       fetchMenuItems();
       setIsModalOpen(false);
       resetForm();
     } catch (error) {
       toast({
-        title: "OOPS!!🤷‍♂️🤷‍♂️",
+        title: "OOPS!!🤦‍♂️🤦‍♂️",
         description: "Failed. Something went wrong",
+        style: { backgroundColor: "#ffcccc", color: "black" },
       });
+      setIsModalOpen(false);
       console.error("Error saving menu item:", error);
     }
   };
@@ -166,9 +171,11 @@ const MenuItems = () => {
       );
       if (!response.ok) {
         toast({
-          title: "OOPS!!🤷‍♂️🤷‍♂️",
+          title: "OOPS!!🤦‍♂️🤦‍♂️",
           description: "Failed. Something went wrong",
+          style: { backgroundColor: "#ffcccc", color: "black" },
         });
+        setIsModalOpen(false);
         throw new Error("Failed to delete menu item");
       }
       toast({
@@ -178,9 +185,11 @@ const MenuItems = () => {
       fetchMenuItems();
     } catch (error) {
       toast({
-        title: "OOPS!!🤷‍♂️🤷‍♂️",
+        title: "OOPS!!🤦‍♂️🤦‍♂️",
         description: "Failed. Something went wrong",
+        style: { backgroundColor: "#ffcccc", color: "black" },
       });
+      setIsModalOpen(false);
       console.error("Error deleting menu item:", error);
     }
   };
