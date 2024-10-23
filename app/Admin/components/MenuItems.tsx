@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { PlusCircle, Edit, Trash2 } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -106,7 +107,7 @@ const MenuItems = () => {
     e.preventDefault();
     try {
       const url = editingItem
-        ? `http://${endpoints.next_ip_port}/api/menu/${editingItem.foodId}`
+        ? `http://${endpoints.next_ip_port}/api/menu?foodId=${editingItem.foodId}`
         : "/api/menu";
       const method = editingItem ? "PUT" : "POST";
       const response = await fetch(url, {
@@ -176,7 +177,7 @@ const MenuItems = () => {
             <PlusCircle className="mr-2 h-4 w-4" /> Add Menu Item
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px] bg-white">
           <DialogHeader>
             <DialogTitle>
               {editingItem ? "Edit Menu Item" : "Add New Menu Item"}

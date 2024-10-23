@@ -32,6 +32,21 @@
 
 // export const Menu = model('menu', menuItemsSchema);
 
+export interface MenuItem {
+  _id: string;
+  foodId?: string;
+  name?: string;
+  description?: string;
+  price?: number;
+  category?: string;
+  ingredients?: string[];
+  halal?: boolean;
+  vegetarian?: boolean;
+  alcoholic?: boolean;
+  countryOfOrigin?: string;
+  imageUrl?: string;
+}
+
 import mongoose, { Schema, model } from 'mongoose';
 
 const menuSchema = new Schema({
