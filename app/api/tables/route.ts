@@ -43,3 +43,69 @@ export async function DELETE(req: Request) {
     }
 }
 
+export async function POST(req: Request) {
+    try {
+        // Connect to the database
+        await connectToDatabase();
+
+        // Parse the request body to extract the table information
+        const { tableNumber, seats, status, occupiedBy } = await req.json();
+
+        // Validate the input
+        if (!tableNumber || !seats || !status || !occupiedBy) {
+            return NextResponse.json({ message: 'All fields are required' }, { status: 400 });
+        }
+
+        // Attempt to add the new table to the database
+        const newTable = await Tables.create({
+            tableNumber: tableNumber,
+            seats: seats,
+            status: status,
+            occupiedBy: occupiedBy
+        });
+
+        // Return a success response
+        return NextResponse.json({ message: 'Table added successfully', table: newTable }, { status: 201 });
+    } catch (error) {
+        console.error('Error adding table:', error);
+        return NextResponse.json({ message: 'Error adding table' }, { status: 500 });
+    }
+}
+
+export async function PUT(req: Request) {
+    try {
+        // Connect to the database
+        await connectToDatabase();
+
+        // Parse the request body to extract the table information
+        const { _id, tableNumber, seats, status, occupiedBy } = await req.json();
+
+        // Validate the input
+        if (!_id || !tableNumber || !seats || !status || !occupiedBy) {
+            return NextResponse.json({ message: 'All fields are required' }, { status: 400 });
+        }
+
+        // Attempt to find the table by _id and update it
+        const updatedTable = await Tables.findByIdAndUpdate(
+            _id,
+            {
+                tableNumber: tableNumber,
+                seats: seats,
+                status: status,
+                occupiedBy: occupiedBy
+            },
+            { new: true } // Option to return the updated document
+        );
+
+        // Check if the table was found and updated
+        if (!updatedTable) {
+            return NextResponse.json({ message: 'Table not found' }, { status: 404 });
+        }
+
+        // Return a success response with the updated table data
+        return NextResponse.json({ message: 'Table updated successfully', table: updatedTable }, { status: 200 });
+    } catch (error) {
+        console.error('Error updating table:', error);
+        return NextResponse.json({ message: 'Error updating table' }, { status: 500 });
+    }
+}

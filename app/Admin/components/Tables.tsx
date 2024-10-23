@@ -352,7 +352,7 @@ const Tables = () => {
             <PlusCircle className="mr-2 h-4 w-4" /> Add Table
           </Button>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className="bg-white">
           <DialogHeader>
             <DialogTitle>
               {editingTable ? "Edit Table" : "Add New Table"}
