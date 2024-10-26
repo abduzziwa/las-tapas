@@ -3,7 +3,7 @@ import mongoose, { Schema } from "mongoose";
 
 const orderSchema = new Schema({
   orderId: {
-    type: String,
+    type: Number,
     required: true,
     unique: true,
   },

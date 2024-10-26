@@ -69,6 +69,7 @@ import styles from "../chef/components/chef.module.css";
 import Header from "./components/Header";
 import WaiterOrderManager from "./components/WaiterOrderManager";
 import WaiterOrderManagerHistory from "./components/waiterOrderManagerHistory";
+import WaiterOrderManagerPayRequests from "./components/waiterOrderManagerPayRequests";
 
 const Page = () => {
   const [activeComponent, setActiveComponent] = useState("waiter");
@@ -80,7 +81,7 @@ const Page = () => {
       case "history":
         return <WaiterOrderManagerHistory />; // Add your History component here
       case "payRequests":
-        return null; // Add your PayRequests component here
+        return <WaiterOrderManagerPayRequests />; // Add your PayRequests component here
       default:
         return null;
     }

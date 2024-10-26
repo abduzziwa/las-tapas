@@ -54,7 +54,7 @@ export async function GET(req: Request) {
         ]);
 
         if (result.length === 0) {
-            return NextResponse.json({ message: 'No orders found', session: sessionId }, { status: 404 });
+            return NextResponse.json({ message: 'No orders Yet', session: sessionId }, { status: 404 });
         }
 
         return NextResponse.json(result, { status: 200 });

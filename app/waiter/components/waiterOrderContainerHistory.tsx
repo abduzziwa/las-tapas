@@ -67,9 +67,9 @@ const WaiterOrderContainer: React.FC<Props> = ({ orderData }) => {
   const getButtonProps = () => {
     switch (orderData.payment) {
       case "paid":
-        return { text: "paid", color: "#006400", disable: true };
+        return { text: "paid", color: "#218838", disable: true };
       case "unpaid":
-        return { text: "unpaid", color: "#b22222", disable: true };
+        return { text: "unpaid", color: "#e0a800", disable: true };
       default:
         return { text: "Error", color: "#FF0000", disable: true };
     }

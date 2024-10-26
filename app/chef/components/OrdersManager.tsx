@@ -63,7 +63,7 @@ const OrdersManager: React.FC = () => {
   }, []);
   useEffect(() => {
     fetchOrders();
-    const intervalId = setInterval(fetchOrders, 2000); // Fetch every 2 seconds
+    const intervalId = setInterval(fetchOrders, 3500); // Fetch every 2 seconds
 
     return () => clearInterval(intervalId);
   }, [fetchOrders]);

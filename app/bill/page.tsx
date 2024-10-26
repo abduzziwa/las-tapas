@@ -180,7 +180,10 @@ export default function Bill() {
             <p>€{grandTotal}</p>
           </div>
           <div>
-            <button className="flex py-[12px] px-[14px] bg-main rounded-full text-white">
+            <button
+              onClick={() => console.log("Clicked..")}
+              className="flex py-[12px] px-[14px] bg-main rounded-full text-white"
+            >
               Or ask a waiter to pay cash
             </button>
           </div>
