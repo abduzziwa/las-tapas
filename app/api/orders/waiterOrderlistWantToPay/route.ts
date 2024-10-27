@@ -43,10 +43,10 @@ export async function PUT(req: Request) {
 
         // Parse the request body
         const body = await req.json();
-        const { sessionId, paymentStatus } = body;
+        const { sessionId, paymentStatus, employeeId } = body;
 
         // Validate required fields
-        if (!sessionId || !paymentStatus) {
+        if (!sessionId || !paymentStatus || !employeeId) {
             return NextResponse.json({ 
                 message: 'Session ID and payment status are required' 
             }, { status: 400 });
@@ -55,7 +55,7 @@ export async function PUT(req: Request) {
         // Find and update the order
         const updatedOrder = await Orders.findOneAndUpdate(
             { orderId: orderId },
-            { payment: paymentStatus },
+            { payment: paymentStatus, employeeId: employeeId },
             { new: true } // Returns the updated document
         );
 

@@ -3,6 +3,8 @@ import connectToDatabase from '../../models/Connection';
 import { Tables } from '../../models/tables';
 import { Orders } from '../../models/Order';
 
+const ORDER_ID_PADDING = 4; // For 0001 to 9999
+
 export async function POST(request: NextRequest) {
   try {
     // Parse request body
@@ -49,22 +51,28 @@ export async function POST(request: NextRequest) {
   //     newOrderId = '1';
   //   }
 
-   // Improved order ID generation
-   const lastOrder = await Orders.findOne({}, {}, { sort: { orderId: -1 } });
+  const lastOrder = await Orders.findOne({}, {}, { sort: { orderId: -1 } });
     
-   let newOrderId: string;
-   if (lastOrder && lastOrder.orderId) {
-     // Convert the orderId to a number and increment
-     const lastOrderNumber = parseInt(lastOrder.orderId);
-     if (isNaN(lastOrderNumber)) {
-       throw new Error('Invalid order ID format in database');
-     }
-     // Pad with zeros to maintain consistent length
-     newOrderId = (lastOrderNumber + 1).toString().padStart(lastOrder.orderId.length, '0');
-   } else {
-     // If no previous orders, start with '00001'
-     newOrderId = '00001';
-   }
+  let newOrderId: string;
+  if (lastOrder && lastOrder.orderId) {
+    // Convert the orderId to a number and increment
+    const lastOrderNumber = parseInt(lastOrder.orderId);
+    if (isNaN(lastOrderNumber)) {
+      throw new Error('Invalid order ID format in database');
+    }
+    
+    // Check if we're about to exceed the maximum value
+    if (lastOrderNumber >= Math.pow(10, ORDER_ID_PADDING) - 1) {
+      throw new Error('Maximum order ID limit reached');
+    }
+    
+    // Pad with zeros to maintain 4-digit format
+    newOrderId = (lastOrderNumber + 1).toString().padStart(ORDER_ID_PADDING, '0');
+  } else {
+    // If no previous orders, start with '0001'
+    newOrderId = '1'.padStart(ORDER_ID_PADDING, '0');
+  }
+
 
     // Create the order object
     const order = {

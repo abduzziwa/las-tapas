@@ -1,218 +1,12 @@
-// "use client";
-
-// import { PlusCircle, Edit, Trash2 } from "lucide-react";
-// import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
-// import { Label } from "@/components/ui/label";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
-// import { Checkbox } from "@/components/ui/checkbox";
-// import { Textarea } from "@/components/ui/textarea";
-// import {
-//   Dialog,
-//   DialogContent,
-//   DialogHeader,
-//   DialogTitle,
-//   DialogTrigger,
-//   DialogFooter,
-// } from "@/components/ui/dialog";
-// import {
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableHead,
-//   TableHeader,
-//   TableRow,
-// } from "@/components/ui/table";
-// import { useEffect, useState } from "react";
-// import { endpoints } from "@/app/api/endpoint";
-
-// const Tables = () => {
-//   const [tables, setTables] = useState<
-//     { tableNumber: string; seats: string; status: string; occupiedBy: string }[]
-//   >([]);
-//   const [isTableModalOpen, setIsTableModalOpen] = useState(false);
-//   const [tableFormData, setTableFormData] = useState({
-//     tableNumber: "",
-//     seats: "",
-//     status: "available",
-//     occupiedBy: "none",
-//   });
-//   const [editingTable, setEditingTable] = useState<{
-//     tableNumber: string;
-//     seats: string;
-//     status: string;
-//     occupiedBy: string;
-//   } | null>(null);
-
-//   useEffect(() => {
-//     fetchTables();
-//   }, []);
-
-//   const fetchTables = async () => {
-//     try {
-//       const response = await fetch(
-//         `http://${endpoints.next_ip_port}/api/tables`
-//       );
-//       if (!response.ok) throw new Error("Failed to fetch tables");
-//       const data = await response.json();
-//       setTables(data);
-//     } catch (error) {
-//       console.error("Error fetching tables:", error);
-//     }
-//   };
-
-//   //   const handleTableInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//   //     const { name, value } = e.target;
-//   //     setTableFormData((prev) => ({ ...prev, [name]: value }));
-//   //   };
-
-//   //   const handleTableStatusChange = (value: string) => {
-//   //     setTableFormData((prev) => ({ ...prev, status: value }));
-//   //   };
-
-//   const handleTableSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-//     e.preventDefault();
-//     try {
-//       const url = editingTable
-//         ? `http://localhost/api/tables/${editingTable.tableNumber}`
-//         : "http://localhost/api/tables";
-//       const method = editingTable ? "PUT" : "POST";
-//       const response = await fetch(url, {
-//         method,
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify(tableFormData),
-//       });
-//       if (!response.ok) throw new Error("Failed to save table");
-//       fetchTables();
-//       setIsTableModalOpen(false);
-//       setEditingTable(null);
-//       setTableFormData({
-//         tableNumber: "",
-//         seats: "",
-//         status: "available",
-//         occupiedBy: "none",
-//       });
-//     } catch (error) {
-//       console.error("Error saving table:", error);
-//     }
-//   };
-
-//   const handleEditTable = (table: {
-//     tableNumber: string;
-//     seats: string;
-//     status: string;
-//     occupiedBy: string;
-//   }) => {
-//     setEditingTable(table);
-//     setTableFormData(table);
-//     setIsTableModalOpen(true);
-//   };
-
-//   const handleDeleteTable = async (tableNumber: string) => {
-//     try {
-//       const response = await fetch(
-//         `http://localhost/api/tables/${tableNumber}`,
-//         {
-//           method: "DELETE",
-//         }
-//       );
-//       if (!response.ok) throw new Error("Failed to delete table");
-//       fetchTables();
-//     } catch (error) {
-//       console.error("Error deleting table:", error);
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <h2 className="text-xl font-semibold mb-4">Tables</h2>
-//       <Dialog open={isTableModalOpen} onOpenChange={setIsTableModalOpen}>
-//         <DialogTrigger asChild>
-//           <Button>
-//             <PlusCircle className="mr-2 h-4 w-4" /> Add Table
-//           </Button>
-//         </DialogTrigger>
-//         <DialogContent>
-//           <DialogHeader>
-//             <DialogTitle>
-//               {editingTable ? "Edit Table" : "Add New Table"}
-//             </DialogTitle>
-//           </DialogHeader>
-//           <form onSubmit={handleTableSubmit}>
-//             {/* Table form fields */}
-//             <DialogFooter className="mt-4">
-//               <Button
-//                 type="button"
-//                 variant="outline"
-//                 onClick={() => {
-//                   setIsTableModalOpen(false);
-//                   setEditingTable(null);
-//                 }}
-//               >
-//                 Cancel
-//               </Button>
-//               <Button type="submit">
-//                 {editingTable ? "Update" : "Add"} Table
-//               </Button>
-//             </DialogFooter>
-//           </form>
-//         </DialogContent>
-//       </Dialog>
-//       <Table>
-//         <TableHeader>
-//           <TableRow>
-//             <TableHead>Table Number</TableHead>
-//             <TableHead>Seats</TableHead>
-//             <TableHead>Status</TableHead>
-//             <TableHead>Occupied By</TableHead>
-//             <TableHead>Actions</TableHead>
-//           </TableRow>
-//         </TableHeader>
-//         <TableBody>
-//           {tables.map((table) => (
-//             <TableRow key={table.tableNumber}>
-//               <TableCell>{table.tableNumber}</TableCell>
-//               <TableCell>{table.seats}</TableCell>
-//               <TableCell>{table.status}</TableCell>
-//               <TableCell>{table.occupiedBy}</TableCell>
-//               <TableCell>
-//                 <Button
-//                   variant="ghost"
-//                   size="sm"
-//                   onClick={() => handleEditTable(table)}
-//                 >
-//                   <Edit className="h-4 w-4" />
-//                 </Button>
-//                 <Button
-//                   variant="ghost"
-//                   size="sm"
-//                   onClick={() => handleDeleteTable(table.tableNumber)}
-//                 >
-//                   <Trash2 className="h-4 w-4" />
-//                 </Button>
-//               </TableCell>
-//             </TableRow>
-//           ))}
-//         </TableBody>
-//       </Table>
-//     </div>
-//   );
-// };
-
-// export default Tables;
+"use client";
 
 import React, { useState, useEffect } from "react";
 import { PlusCircle, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   Select,
   SelectContent,
@@ -240,7 +34,6 @@ import { endpoints } from "@/app/api/endpoint";
 import StatusBadge, { StatusBadgeProps } from "./StatusBadge";
 
 const Tables = () => {
-  const { toast } = useToast();
   const [tables, setTables] = useState<
     { tableNumber: string; seats: string; status: string; occupiedBy: string }[]
   >([]);
@@ -266,10 +59,13 @@ const Tables = () => {
     try {
       const response = await fetch("/api/tables");
       if (!response.ok) {
-        toast({
-          title: "OOPS!!🤦‍♂️🤦‍♂️",
-          description: "Failed. Something went wrong",
-          style: { backgroundColor: "#ffcccc", color: "black" },
+        toast.error("Failed to fetch tables", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
         });
         setIsModalOpen(false);
         throw new Error("Failed to fetch tables");
@@ -277,17 +73,15 @@ const Tables = () => {
 
       const data = await response.json();
       setTables(data);
-      toast({
-        title: "Success!🎉🎉",
-        description: "Operation completed successfully",
-        style: { backgroundColor: "green", color: "white" },
-      });
     } catch (error) {
       console.error("Error fetching tables:", error);
-      toast({
-        title: "OOPS!!🤦‍♂️🤦‍♂️",
-        description: "Failed. Something went wrong",
-        style: { backgroundColor: "#ffcccc", color: "black" },
+      toast.error("Failed to fetch tables", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
       });
       setIsModalOpen(false);
     }
@@ -315,10 +109,13 @@ const Tables = () => {
         body: JSON.stringify(formData),
       });
       if (!response.ok) {
-        toast({
-          title: "OOPS!!🤦‍♂️🤦‍♂️",
-          description: "Failed. Something went wrong",
-          style: { backgroundColor: "#ffcccc", color: "black" },
+        toast.error("Failed to save table", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
         });
         setIsModalOpen(false);
         throw new Error("Failed to save table");
@@ -326,15 +123,25 @@ const Tables = () => {
       fetchTables();
       setIsModalOpen(false);
       resetForm();
-      toast({
-        title: "Sucess😎😎",
-        description: "Operation completed successfully",
-      });
+      toast.success(
+        `Table ${editingTable ? "updated" : "added"} successfully`,
+        {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        }
+      );
     } catch (error) {
-      toast({
-        title: "OOPS!!🤦‍♂️🤦‍♂️",
-        description: "Failed. Something went wrong",
-        style: { backgroundColor: "#ffcccc", color: "black" },
+      toast.error("Failed to save table", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
       });
       setIsModalOpen(false);
       console.error("Error saving table:", error);
@@ -361,20 +168,34 @@ const Tables = () => {
         }
       );
       if (!response.ok) {
-        toast({
-          title: "OOPS!!🤦‍♂️🤦‍♂️",
-          description: "Failed. Something went wrong",
-          style: { backgroundColor: "#ffcccc", color: "black" },
+        toast.error("Failed to delete table", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
         });
         setIsModalOpen(false);
         throw new Error("Failed to delete table");
       }
       fetchTables();
+      toast.success("Table deleted successfully", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     } catch (error) {
-      toast({
-        title: "OOPS!!🤦‍♂️🤦‍♂️",
-        description: "Failed. Something went wrong",
-        style: { backgroundColor: "#ffcccc", color: "black" },
+      toast.error("Failed to delete table", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
       });
       setIsModalOpen(false);
       console.error("Error deleting table:", error);
@@ -393,6 +214,15 @@ const Tables = () => {
 
   return (
     <div>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        draggable
+        pauseOnHover
+      />
       <h2 className="text-xl font-semibold mb-4">Tables</h2>
       <Dialog
         open={isModalOpen}

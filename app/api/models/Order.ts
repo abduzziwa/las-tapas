@@ -7,6 +7,10 @@ const orderSchema = new Schema({
     required: true,
     unique: true,
   },
+  employeeId:{
+    type: String,
+    required: false,
+  },
   sessionId: {
     type: String,
     required: true,

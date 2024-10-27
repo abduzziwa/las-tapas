@@ -15,6 +15,7 @@ const WaiterOrderPaymentContainer: React.FC<Props> = ({ orderData }) => {
 
   const handlePaymentUpdate = async () => {
     setIsLoading(true);
+    const employeeID = sessionStorage.getItem("employeeId");
     try {
       const response = await fetch(
         `http://${endpoints.next_ip_port}/api/orders/waiterOrderlistWantToPay?orderId=${orderData.orderId}`,
@@ -26,6 +27,7 @@ const WaiterOrderPaymentContainer: React.FC<Props> = ({ orderData }) => {
           body: JSON.stringify({
             sessionId: orderData.sessionId,
             paymentStatus: "paid",
+            employeeId: employeeID,
           }),
         }
       );

@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
+import { endpoints } from '../endpoint';
 
-const MONGODB_URI = "mongodb://localhost:27017/";
+const MONGODB_URI = endpoints.MONGODB_URI;
 const DB_NAME = "LAS_TAAPS";
 
 if (!MONGODB_URI) {

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { PlusCircle, Edit, Trash2 } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   Select,
   SelectContent,
@@ -30,10 +31,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { endpoints } from "@/app/api/endpoint";
-import { useToast } from "@/hooks/use-toast";
 
 const MenuItems = () => {
-  const { toast } = useToast();
   interface MenuItem {
     foodId: string;
     name: string;
@@ -73,20 +72,28 @@ const MenuItems = () => {
     try {
       const response = await fetch("/api/menu");
       if (!response.ok) {
-        toast({
-          title: "OOPS!!🤷‍♂️🤷‍♂️",
-          description: "Failed. Something went wrong",
+        toast.error("Failed to fetch menu items", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
         });
         throw new Error("Failed to fetch menu items");
       }
       const data = await response.json();
       setMenuItems(data);
     } catch (error) {
-      toast({
-        title: "OOPS!!🤷‍♂️🤷‍♂️",
-        description: "Failed. Something went wrong",
-      });
       console.error("Error fetching menu items:", error);
+      toast.error("Failed to fetch menu items", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     }
   };
 
@@ -128,30 +135,40 @@ const MenuItems = () => {
         body: JSON.stringify(formData),
       });
       if (!response.ok) {
-        toast({
-          title: "OOPS!!🤦‍♂️🤦‍♂️",
-          description: "Failed. Something went wrong",
-          style: { backgroundColor: "#ffcccc", color: "black" },
+        toast.error("Failed to save menu item", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
         });
-        setIsModalOpen(false);
         throw new Error("Failed to save menu item");
       }
-      toast({
-        title: "Success!🎉🎉",
-        description: "Operation completed successfully",
-        style: { backgroundColor: "green", color: "white" },
-      });
+      toast.success(
+        `Menu item ${editingItem ? "updated" : "added"} successfully 👍`,
+        {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        }
+      );
       fetchMenuItems();
       setIsModalOpen(false);
       resetForm();
     } catch (error) {
-      toast({
-        title: "OOPS!!🤦‍♂️🤦‍♂️",
-        description: "Failed. Something went wrong",
-        style: { backgroundColor: "#ffcccc", color: "black" },
-      });
-      setIsModalOpen(false);
       console.error("Error saving menu item:", error);
+      toast.error("Failed to save menu item", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     }
   };
 
@@ -170,27 +187,35 @@ const MenuItems = () => {
         }
       );
       if (!response.ok) {
-        toast({
-          title: "OOPS!!🤦‍♂️🤦‍♂️",
-          description: "Failed. Something went wrong",
-          style: { backgroundColor: "#ffcccc", color: "black" },
+        toast.error("Failed to delete menu item 🤦‍♂️", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
         });
-        setIsModalOpen(false);
-        throw new Error("Failed to delete menu item");
+        throw new Error("Failed to delete menu item 🤦‍♂️");
       }
-      toast({
-        title: "Success!🎉🎉",
-        description: "Operation completed successfully",
+      toast.success("Menu item deleted successfully 👍", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
       });
       fetchMenuItems();
     } catch (error) {
-      toast({
-        title: "OOPS!!🤦‍♂️🤦‍♂️",
-        description: "Failed. Something went wrong",
-        style: { backgroundColor: "#ffcccc", color: "black" },
-      });
-      setIsModalOpen(false);
       console.error("Error deleting menu item:", error);
+      toast.error("Failed to delete menu item", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     }
   };
 
@@ -213,6 +238,15 @@ const MenuItems = () => {
 
   return (
     <div>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        draggable
+        pauseOnHover
+      />
       <h2 className="text-xl font-semibold mb-4">Menu Items</h2>
       <Dialog
         open={isModalOpen}
@@ -361,6 +395,8 @@ const MenuItems = () => {
                   className="col-span-3"
                 />
               </div>
+              {/* Rest of the form fields remain the same */}
+              {/* ... */}
             </div>
             <DialogFooter>
               <Button type="submit">
