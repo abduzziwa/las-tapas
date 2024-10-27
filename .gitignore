@@ -37,4 +37,4 @@ next-env.d.ts
 las-tapas.log
 *.log
 
-Dockerfile
+*Dockerfile
