@@ -3,6 +3,8 @@ import { PlusCircle, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   Select,
   SelectContent,
@@ -69,11 +71,29 @@ const MenuItems = () => {
   const fetchMenuItems = async () => {
     try {
       const response = await fetch("/api/menu");
-      if (!response.ok) throw new Error("Failed to fetch menu items");
+      if (!response.ok) {
+        toast.error("Failed to fetch menu items", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        throw new Error("Failed to fetch menu items");
+      }
       const data = await response.json();
       setMenuItems(data);
     } catch (error) {
       console.error("Error fetching menu items:", error);
+      toast.error("Failed to fetch menu items", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     }
   };
 
@@ -106,7 +126,7 @@ const MenuItems = () => {
     e.preventDefault();
     try {
       const url = editingItem
-        ? `http://${endpoints.next_ip_port}/api/menu/${editingItem.foodId}`
+        ? `http://${endpoints.next_ip_port}/api/menu?foodId=${editingItem.foodId}`
         : "/api/menu";
       const method = editingItem ? "PUT" : "POST";
       const response = await fetch(url, {
@@ -114,12 +134,41 @@ const MenuItems = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-      if (!response.ok) throw new Error("Failed to save menu item");
+      if (!response.ok) {
+        toast.error("Failed to save menu item", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        throw new Error("Failed to save menu item");
+      }
+      toast.success(
+        `Menu item ${editingItem ? "updated" : "added"} successfully 👍`,
+        {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        }
+      );
       fetchMenuItems();
       setIsModalOpen(false);
       resetForm();
     } catch (error) {
       console.error("Error saving menu item:", error);
+      toast.error("Failed to save menu item", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     }
   };
 
@@ -137,10 +186,36 @@ const MenuItems = () => {
           method: "DELETE",
         }
       );
-      if (!response.ok) throw new Error("Failed to delete menu item");
+      if (!response.ok) {
+        toast.error("Failed to delete menu item 🤦‍♂️", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        throw new Error("Failed to delete menu item 🤦‍♂️");
+      }
+      toast.success("Menu item deleted successfully 👍", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
       fetchMenuItems();
     } catch (error) {
       console.error("Error deleting menu item:", error);
+      toast.error("Failed to delete menu item", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     }
   };
 
@@ -163,6 +238,15 @@ const MenuItems = () => {
 
   return (
     <div>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        draggable
+        pauseOnHover
+      />
       <h2 className="text-xl font-semibold mb-4">Menu Items</h2>
       <Dialog
         open={isModalOpen}
@@ -176,7 +260,7 @@ const MenuItems = () => {
             <PlusCircle className="mr-2 h-4 w-4" /> Add Menu Item
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px] bg-white">
           <DialogHeader>
             <DialogTitle>
               {editingItem ? "Edit Menu Item" : "Add New Menu Item"}
@@ -311,6 +395,8 @@ const MenuItems = () => {
                   className="col-span-3"
                 />
               </div>
+              {/* Rest of the form fields remain the same */}
+              {/* ... */}
             </div>
             <DialogFooter>
               <Button type="submit">

@@ -1,8 +1,12 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 import { PlusCircle, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   Select,
   SelectContent,
@@ -54,11 +58,32 @@ const Tables = () => {
   const fetchTables = async () => {
     try {
       const response = await fetch("/api/tables");
-      if (!response.ok) throw new Error("Failed to fetch tables");
+      if (!response.ok) {
+        toast.error("Failed to fetch tables", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        setIsModalOpen(false);
+        throw new Error("Failed to fetch tables");
+      }
+
       const data = await response.json();
       setTables(data);
     } catch (error) {
       console.error("Error fetching tables:", error);
+      toast.error("Failed to fetch tables", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      setIsModalOpen(false);
     }
   };
 
@@ -75,7 +100,7 @@ const Tables = () => {
     e.preventDefault();
     try {
       const url = editingTable
-        ? `http://${endpoints.next_ip_port}/api/tables/${editingTable.tableNumber}`
+        ? `http://${endpoints.next_ip_port}/api/tables?tableNumber=${editingTable.tableNumber}`
         : `http://${endpoints.next_ip_port}/api/tables`;
       const method = editingTable ? "PUT" : "POST";
       const response = await fetch(url, {
@@ -83,11 +108,42 @@ const Tables = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-      if (!response.ok) throw new Error("Failed to save table");
+      if (!response.ok) {
+        toast.error("Failed to save table", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        setIsModalOpen(false);
+        throw new Error("Failed to save table");
+      }
       fetchTables();
       setIsModalOpen(false);
       resetForm();
+      toast.success(
+        `Table ${editingTable ? "updated" : "added"} successfully`,
+        {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        }
+      );
     } catch (error) {
+      toast.error("Failed to save table", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      setIsModalOpen(false);
       console.error("Error saving table:", error);
     }
   };
@@ -106,14 +162,42 @@ const Tables = () => {
   const handleDelete = async (tableNumber: string) => {
     try {
       const response = await fetch(
-        `http://${endpoints.next_ip_port}/api/tables/${tableNumber}`,
+        `http://${endpoints.next_ip_port}/api/tables?tableNumber=${tableNumber}`,
         {
           method: "DELETE",
         }
       );
-      if (!response.ok) throw new Error("Failed to delete table");
+      if (!response.ok) {
+        toast.error("Failed to delete table", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        setIsModalOpen(false);
+        throw new Error("Failed to delete table");
+      }
       fetchTables();
+      toast.success("Table deleted successfully", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     } catch (error) {
+      toast.error("Failed to delete table", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      setIsModalOpen(false);
       console.error("Error deleting table:", error);
     }
   };
@@ -130,6 +214,15 @@ const Tables = () => {
 
   return (
     <div>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        draggable
+        pauseOnHover
+      />
       <h2 className="text-xl font-semibold mb-4">Tables</h2>
       <Dialog
         open={isModalOpen}
@@ -143,7 +236,7 @@ const Tables = () => {
             <PlusCircle className="mr-2 h-4 w-4" /> Add Table
           </Button>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className="bg-white">
           <DialogHeader>
             <DialogTitle>
               {editingTable ? "Edit Table" : "Add New Table"}

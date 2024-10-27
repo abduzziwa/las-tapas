@@ -45,7 +45,9 @@ export default function OrderHistory() {
           `http://${endpoints.next_ip_port}/api/orders/clientOrderlistOrdered?sessionId=${sessionId}`
         );
         if (!response.ok) {
-          throw new Error("Failed to fetch orders");
+          const message = await response.json();
+
+          return <h1>{message.message}</h1>;
         }
         const data: Order[] = await response.json();
         setOrders(data);
@@ -92,7 +94,7 @@ export default function OrderHistory() {
         {loading && <p className="text-gray-600">Loading orders...</p>}
         {error && <p className="text-red-500">Error: {error}</p>}
         {!loading && !error && orders.length === 0 && (
-          <p className="text-gray-600">No orders found.</p>
+          <p className="text-gray-600 text-4xl font-bold">No orders found.</p>
         )}
         {orders.map((order) => (
           <div

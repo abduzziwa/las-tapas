@@ -78,7 +78,13 @@
 //     console.log('Updated table status to occupied:', table);
 
 //     // Create response with redirect
-//     const response = NextResponse.redirect(new URL('/', request.url));
+//     const redirectUrl = new URL('/', request.url);
+    
+//     // Append session and table data as query parameters
+//     redirectUrl.searchParams.append('sessionId', sessionId);
+//     redirectUrl.searchParams.append('tableNumber', tableNumber);
+
+//     const response = NextResponse.redirect(redirectUrl);
 
 //     // Set cookies
 //     response.cookies.set('sessionId', sessionId, {
@@ -89,11 +95,6 @@
 //       path: endpoints.next_home,
 //     });
 
-//     response.cookies.set('sessionStorageData', JSON.stringify({ sessionId, tableNumber }), {
-//       maxAge: 60, // 1 minute
-//       path: endpoints.next_home,
-//     });
-
 //     console.log('Cookies set, redirecting to home page...');
 //     return response;
 //   } catch (error) {
@@ -101,6 +102,8 @@
 //     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
 //   }
 // }
+
+
 import { NextResponse } from "next/server";
 import { cookies } from 'next/headers';
 import crypto from 'crypto';
@@ -180,9 +183,11 @@ export async function GET(request: Request) {
     await table.save();
     console.log('Updated table status to occupied:', table);
 
-    // Create response with redirect
-    const redirectUrl = new URL('/', request.url);
-    
+    // Create response with redirect using the IP address from endpoints
+    // Extract just the host:port part from endpoints.next_ip_port
+    const baseUrl = `http://${endpoints.next_ip_port}`;
+    const redirectUrl = new URL('/', baseUrl);
+
     // Append session and table data as query parameters
     redirectUrl.searchParams.append('sessionId', sessionId);
     redirectUrl.searchParams.append('tableNumber', tableNumber);
@@ -195,10 +200,10 @@ export async function GET(request: Request) {
       secure: process.env.NODE_ENV !== 'development',
       maxAge: 60 * 60 * 24, // 24 hours
       sameSite: 'strict',
-      path: endpoints.next_home,
+      path: '/',  // Changed to root path for broader cookie access
     });
 
-    console.log('Cookies set, redirecting to home page...');
+    console.log('Cookies set, redirecting to:', redirectUrl.toString());
     return response;
   } catch (error) {
     console.error('Error processing QR code:', error);

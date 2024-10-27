@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import OrdersManager from "./components/OrdersManager";
 import styles from "./components/chef.module.css";
+import WaiterAuthGuard from "../waiter/components/WaiterAuthGuard";
 
 const Page = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -31,19 +32,12 @@ const Page = () => {
 
   return (
     <>
-      <main className={`${styles.mainChef} mt-4 m-[3.5rem]`}>
-        <p className="mb-[-1.5rem] text-right">Today is {formattedDate}</p>
-        <h1 className="text-left font-bold text-4xl font-sans">
-          Welcome Chefs
-        </h1>
-        <div className="text-center mb-4 mt-[-1rem]">
-          <p className="border-4 border-solid border-black inline-block p-2 mb-3">
-            Every Second Counts.{" "}
-            <span className="text-red-600 font-bold">{formattedTime}</span>
-          </p>
-        </div>
-        <OrdersManager />
-      </main>
+      <WaiterAuthGuard>
+        <h1 className="text-2xl font-bold text-center">HALLO CHEFS</h1>
+        <main className={`${styles.mainChef} mt-4 m-[3.5rem]`}>
+          <OrdersManager />
+        </main>
+      </WaiterAuthGuard>
     </>
   );
 };
