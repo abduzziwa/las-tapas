@@ -100,12 +100,12 @@ function LoginForm() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-medium text-gray-400 mb-1.5">Employee ID</label>
+              <label className="block text-xs font-medium text-gray-400 mb-1.5">Employee ID or Email</label>
               <input
                 type="text"
                 value={employeeId}
                 onChange={(e) => setEmployeeId(e.target.value)}
-                placeholder="e.g. EMP001"
+                placeholder="EMP001 or email@example.com"
                 required
                 autoComplete="username"
                 className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"

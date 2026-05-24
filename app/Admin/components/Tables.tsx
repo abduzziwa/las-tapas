@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { PlusCircle, Edit, Trash2, QrCode, RefreshCw, Printer, AlertCircle } from "lucide-react";
+import { PlusCircle, Edit, Trash2, QrCode, RefreshCw, Printer, AlertCircle, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -37,6 +37,12 @@ interface TableData {
   seats: number;
   status: string;
   occupiedBy: string[];
+}
+
+interface SeatInfo {
+  seatNumber: string;
+  occupied: boolean;
+  guestName: string | null;
 }
 
 interface QRSeat { seat: string; url: string; }
@@ -80,9 +86,17 @@ const Tables = () => {
   const [apiError,     setApiError]     = useState<string | null>(null);
   const [touched,      setTouched]      = useState<Set<string>>(new Set());
   const [editingTable, setEditingTable] = useState<TableData | null>(null);
+  const [appHost,      setAppHost]      = useState('');
+  const [expandedTable, setExpandedTable] = useState<string | null>(null);
+  const [seatData,      setSeatData]      = useState<Record<string, SeatInfo[]>>({});
+  const [seatLoading,   setSeatLoading]   = useState<Record<string, boolean>>({});
   const printRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { fetchTables(); }, []);
+  useEffect(() => {
+    fetchTables();
+    const saved = localStorage.getItem('qr_app_host');
+    if (saved) setAppHost(saved);
+  }, []);
 
   const fetchTables = async () => {
     try {
@@ -154,9 +168,30 @@ const Tables = () => {
       });
       if (!res.ok) throw new Error();
       toast.success(`Table ${table.tableNumber} reset`);
+      setSeatData(prev => { const next = { ...prev }; delete next[table.tableNumber]; return next; });
+      setExpandedTable(null);
       fetchTables();
     } catch {
       toast.error("Failed to reset table");
+    }
+  };
+
+  const toggleSeats = async (tableNumber: string) => {
+    if (expandedTable === tableNumber) {
+      setExpandedTable(null);
+      return;
+    }
+    setExpandedTable(tableNumber);
+    if (seatData[tableNumber]) return; // already loaded
+    setSeatLoading(prev => ({ ...prev, [tableNumber]: true }));
+    try {
+      const res = await fetch(`/api/tables/seats?tableNumber=${tableNumber}`);
+      if (res.ok) {
+        const data = await res.json();
+        setSeatData(prev => ({ ...prev, [tableNumber]: data.seats }));
+      }
+    } finally {
+      setSeatLoading(prev => ({ ...prev, [tableNumber]: false }));
     }
   };
 
@@ -165,7 +200,8 @@ const Tables = () => {
     setIsQROpen(true);
     setQrData(null);
     try {
-      const res = await fetch(`/api/qrcode?tableNumber=${table.tableNumber}&seats=${table.seats}`);
+      const hostParam = appHost.trim() ? `&host=${encodeURIComponent(appHost.trim())}` : '';
+      const res = await fetch(`/api/qrcode?tableNumber=${table.tableNumber}&seats=${table.seats}${hostParam}`);
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
         toast.error(body.message || "Failed to generate QR codes");
@@ -322,6 +358,24 @@ const Tables = () => {
         </Dialog>
       </div>
 
+      {/* QR host setting */}
+      <div className="mb-4 flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3">
+        <div className="flex-1">
+          <label className="block text-xs font-medium text-gray-500 mb-1">App IP / host for QR codes</label>
+          <input
+            type="text"
+            value={appHost}
+            onChange={e => setAppHost(e.target.value)}
+            onBlur={() => localStorage.setItem('qr_app_host', appHost.trim())}
+            placeholder="e.g. 192.168.1.50:3001 or myrestaurant.com"
+            className="w-full bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
+          />
+        </div>
+        <p className="text-xs text-gray-400 max-w-[200px] leading-tight pt-4">
+          QR codes will use this address. Leave blank to auto-detect.
+        </p>
+      </div>
+
       {/* Tables list */}
       <div className="overflow-x-auto rounded-xl border border-gray-200">
         <Table>
@@ -330,7 +384,7 @@ const Tables = () => {
               <TableHead className="font-semibold text-xs uppercase tracking-wide text-gray-500">Table</TableHead>
               <TableHead className="font-semibold text-xs uppercase tracking-wide text-gray-500">Seats</TableHead>
               <TableHead className="font-semibold text-xs uppercase tracking-wide text-gray-500">Status</TableHead>
-              <TableHead className="font-semibold text-xs uppercase tracking-wide text-gray-500">Active Sessions</TableHead>
+              <TableHead className="font-semibold text-xs uppercase tracking-wide text-gray-500">Seats</TableHead>
               <TableHead className="font-semibold text-xs uppercase tracking-wide text-gray-500">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -343,19 +397,28 @@ const Tables = () => {
               </TableRow>
             )}
             {tables.map(table => (
-              <TableRow key={table.tableNumber} className="hover:bg-gray-50 transition-colors">
+              <React.Fragment key={table.tableNumber}>
+              <TableRow className="hover:bg-gray-50 transition-colors">
                 <TableCell className="font-semibold text-gray-900">{table.tableNumber}</TableCell>
                 <TableCell className="text-gray-600">{table.seats}</TableCell>
                 <TableCell>
                   <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${STATUS_STYLE[table.status] ?? "bg-gray-100 text-gray-600"}`}>
-                    {table.status}
+                    {table.status === 'occupied'
+                      ? `${table.occupiedBy.length} / ${table.seats} seats`
+                      : table.status}
                   </span>
                 </TableCell>
                 <TableCell>
                   {Array.isArray(table.occupiedBy) && table.occupiedBy.length > 0 ? (
-                    <span className="text-sm text-gray-700 font-medium">
+                    <button
+                      onClick={() => toggleSeats(table.tableNumber)}
+                      className="flex items-center gap-1.5 text-sm text-gray-700 font-medium hover:text-orange-600 transition-colors"
+                    >
                       {table.occupiedBy.length} / {table.seats} seated
-                    </span>
+                      {expandedTable === table.tableNumber
+                        ? <ChevronUp className="h-3.5 w-3.5" />
+                        : <ChevronDown className="h-3.5 w-3.5" />}
+                    </button>
                   ) : (
                     <span className="text-gray-400 text-sm">—</span>
                   )}
@@ -389,6 +452,43 @@ const Tables = () => {
                   </div>
                 </TableCell>
               </TableRow>
+
+              {/* Seat accordion */}
+              {expandedTable === table.tableNumber && (
+                <TableRow className="bg-gray-50">
+                  <TableCell colSpan={5} className="py-3 px-5">
+                    {seatLoading[table.tableNumber] ? (
+                      <div className="flex items-center gap-2 text-sm text-gray-400">
+                        <div className="w-4 h-4 border-2 border-orange-400 border-t-transparent rounded-full animate-spin" />
+                        Loading seats…
+                      </div>
+                    ) : (
+                      <div className="flex flex-wrap gap-2">
+                        {(seatData[table.tableNumber] ?? []).map(seat => (
+                          <div
+                            key={seat.seatNumber}
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border ${
+                              seat.occupied
+                                ? "bg-red-50 border-red-200 text-red-700"
+                                : "bg-green-50 border-green-200 text-green-700"
+                            }`}
+                          >
+                            <span className={`w-2 h-2 rounded-full ${seat.occupied ? "bg-red-400" : "bg-green-400"}`} />
+                            {seat.seatNumber}
+                            {seat.occupied && seat.guestName && (
+                              <span className="text-red-500 font-normal">· {seat.guestName}</span>
+                            )}
+                            {seat.occupied && !seat.guestName && (
+                              <span className="text-red-400 font-normal">· occupied</span>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </TableCell>
+                </TableRow>
+              )}
+              </React.Fragment>
             ))}
           </TableBody>
         </Table>

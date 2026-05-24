@@ -141,6 +141,15 @@ export async function GET(request: Request) {
       return NextResponse.json({ message: "Table not found" }, { status: 404 });
     }
 
+    // Reject if this seat already has an active session
+    const existing = await Session.findOne({ lastActiveTable: tableNumber, seatNumber, status: "active" }).lean();
+    if (existing) {
+      return NextResponse.json(
+        { message: `Seat ${seatNumber} is already occupied. Please ask a staff member for help.` },
+        { status: 409 },
+      );
+    }
+
     // Each QR scan creates a fresh session — one per person per seat
     const sessionId = `s${crypto.randomBytes(8).toString("hex")}`;
     await new Session({
@@ -158,7 +167,8 @@ export async function GET(request: Request) {
     await table.save();
 
     const reqUrl = new URL(request.url);
-    const baseUrl = process.env.APP_BASE_URL ?? `${reqUrl.protocol}//${reqUrl.host}`;
+    const host = request.headers.get('host') ?? reqUrl.host;
+    const baseUrl = process.env.APP_BASE_URL ?? `${reqUrl.protocol}//${host}`;
     const redirectUrl = new URL("/", baseUrl);
     redirectUrl.searchParams.append("sessionId", sessionId);
     redirectUrl.searchParams.append("tableNumber", tableNumber);

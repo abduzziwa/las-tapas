@@ -45,7 +45,8 @@ export async function GET(
     log({ eventType: "table.occupied", tableNumber, sessionId });
 
     const reqUrl = new URL(request.url);
-    const baseUrl = process.env.APP_BASE_URL ?? `${reqUrl.protocol}//${reqUrl.host}`;
+    const host = request.headers.get('host') ?? reqUrl.host;
+    const baseUrl = process.env.APP_BASE_URL ?? `${reqUrl.protocol}//${host}`;
     const redirectUrl = new URL("/", baseUrl);
     redirectUrl.searchParams.set("sessionId", sessionId);
     redirectUrl.searchParams.set("tableNumber", tableNumber);

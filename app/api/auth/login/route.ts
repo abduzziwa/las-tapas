@@ -13,10 +13,13 @@ export async function POST(req: Request) {
     const { employeeId, password } = await req.json();
 
     if (!employeeId || !password) {
-      return NextResponse.json({ message: 'Employee ID and password are required' }, { status: 400 });
+      return NextResponse.json({ message: 'Employee ID or email and password are required' }, { status: 400 });
     }
 
-    const employee = await Employees.findOne({ employeeId }).lean() as {
+    const identifier = employeeId.trim();
+    const employee = await Employees.findOne({
+      $or: [{ employeeId: identifier }, { email: identifier.toLowerCase() }],
+    }).lean() as {
       employeeId: string;
       name: string;
       role: string;

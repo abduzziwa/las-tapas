@@ -24,7 +24,10 @@ export async function GET(request: Request) {
       );
     }
 
-    const baseUrl = process.env.APP_BASE_URL ?? `${reqUrl.protocol}//${reqUrl.host}`;
+    const hostOverride = searchParams.get('host');
+    const baseUrl = hostOverride
+      ? (hostOverride.startsWith('http') ? hostOverride : `http://${hostOverride}`)
+      : (process.env.APP_BASE_URL ?? `${reqUrl.protocol}//${reqUrl.host}`);
 
     // One QR code per seat — each points to /customer/[tableNumber]
     // Seat number is auto-assigned server-side when the customer scans.
