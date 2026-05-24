@@ -45,6 +45,7 @@ export interface MenuItem {
   alcoholic?: boolean;
   countryOfOrigin?: string;
   imageUrl?: string;
+  images?: string[];
 }
 
 import mongoose, { Schema, model } from 'mongoose';
@@ -61,6 +62,7 @@ const menuSchema = new Schema({
   alcoholic: { type: Boolean }, // Only for drinks
   countryOfOrigin: { type: String },
   imageUrl: { type: String },
+  images: { type: [String], default: [] },
   createdAt: { type: Date, default: Date.now }
 });
 

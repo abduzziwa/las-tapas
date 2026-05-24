@@ -116,26 +116,30 @@ export async function POST(req: Request) {
             alcoholic,
             countryOfOrigin,
             imageUrl,
+            images,
         } = await req.json();
 
-        // Validate the input
-        if (!foodId || !name || !description || !price || !category || !ingredients || halal === undefined || vegetarian === undefined || alcoholic === undefined || !countryOfOrigin || !imageUrl) {
-            return NextResponse.json({ message: 'All fields are required' }, { status: 400 });
+        // Validate the required fields
+        if (!foodId || !name || !description || !price || !category) {
+            return NextResponse.json({ message: 'foodId, name, description, price and category are required' }, { status: 400 });
         }
+
+        const imageUrls: string[] = Array.isArray(images) ? images.filter(Boolean) : [];
 
         // Attempt to create a new menu item in the database
         const newMenuItem = await Menu.create({
-            foodId: foodId,
-            name: name,
-            description: description,
-            price: price,
-            category: category,
-            ingredients: ingredients,
-            halal: halal,
-            vegetarian: vegetarian,
-            alcoholic: alcoholic,
-            countryOfOrigin: countryOfOrigin,
-            imageUrl: imageUrl,
+            foodId,
+            name,
+            description,
+            price,
+            category,
+            ingredients:     Array.isArray(ingredients) ? ingredients : [],
+            halal:           halal     ?? false,
+            vegetarian:      vegetarian ?? false,
+            alcoholic:       alcoholic  ?? false,
+            countryOfOrigin: countryOfOrigin ?? '',
+            imageUrl:        imageUrls[0] ?? imageUrl ?? '',
+            images:          imageUrls,
         });
 
         // Return a success response with the newly created menu item data

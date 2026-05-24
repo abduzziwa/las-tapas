@@ -1,12 +1,8 @@
 import mongoose from 'mongoose';
-import { endpoints } from '../endpoint';
 
-const MONGODB_URI = endpoints.MONGODB_URI;
-const DB_NAME = "LAS_TAAPS";
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/';
+const DB_NAME = process.env.MONGODB_DB || 'LAS_TAAPS';
 
-if (!MONGODB_URI) {
-  throw new Error('MONGODB_URI is required');
-}
 
 let cached: { conn: typeof mongoose | null; promise: Promise<typeof mongoose> | null } = { conn: null, promise: null };
 

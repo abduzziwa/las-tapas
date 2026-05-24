@@ -47,6 +47,7 @@ const WaiterOrderPaymentContainer: React.FC<Props> = ({ orderData }) => {
       <WaiterOrder
         OrderNumber={orderData.orderId}
         TableNumber={orderData.tableNumber}
+        GuestName={orderData.guestName}
       />
       {orderData.foodItems.map((item) => (
         <WaiterOrderList

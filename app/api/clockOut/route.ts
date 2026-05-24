@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import connectToDatabase from '../models/Connection';
 import Shift from '../models/Shift';
 import Break from '../models/Break';
+import { log } from '../utils/auditLogger';
 
 export async function POST(req: Request) {
     try {
@@ -31,6 +32,7 @@ export async function POST(req: Request) {
         shift.totalWorkTime = shiftEnd.getTime() - shift.shiftStart.getTime() - totalBreakTime;
 
         await shift.save();
+        log({ eventType: 'employee.clockout', actor: { type: 'waiter', id: String(shift.employeeId) } });
         return NextResponse.json({ success: true, shift }, { status: 200 });
     } catch (error) {
         console.error('Failed to clock out:', error);

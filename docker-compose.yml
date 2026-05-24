@@ -1,0 +1,83 @@
+version: '3.9'
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Las Tapas — Docker Compose
+#
+# Services:
+#   mongodb   MongoDB 7.x with a persistent named volume
+#   app       Next.js 14 app (auto-seeds on first start via instrumentation.ts)
+#
+# Usage:
+#   docker compose up --build                    # first run (builds image)
+#   docker compose up                            # subsequent runs
+#   docker compose down -v                       # stop + wipe database & uploads
+#   docker compose exec app npm run seed:menu    # seed food, drinks & desserts
+#   docker compose exec app npm run cleardb      # wipe the entire database
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  # ── MongoDB ─────────────────────────────────────────────────────────────────
+  mongodb:
+    image: mongo:7
+    container_name: las-tapas-mongodb
+    restart: unless-stopped
+    environment:
+      # No auth for local dev. Add MONGO_INITDB_ROOT_USERNAME/PASSWORD for prod.
+      MONGO_INITDB_DATABASE: LAS_TAAPS
+    volumes:
+      - mongo_data:/data/db
+      # Optional: place .js init scripts in ./docker/mongo-init/ and they run
+      # on the very first container start (only when data/db is empty).
+      # - ./docker/mongo-init:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "27017:27017"
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')", "--quiet"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+  # ── Next.js app ─────────────────────────────────────────────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # The host:port the browser uses to reach the API.
+        # For local Docker this is localhost:3001.
+        NEXT_PUBLIC_APP_HOST: "localhost:3001"
+    container_name: las-tapas-app
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy   # wait until MongoDB passes its health check
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      HOSTNAME: 0.0.0.0
+
+      # MongoDB — use the service name as the hostname inside the Docker network
+      MONGODB_URI: mongodb://mongodb:27017/
+      MONGODB_DB: LAS_TAAPS
+
+      # HMAC signing key — change this before deploying anywhere real
+      QR_SECRET: "las-tapas-change-this-secret-in-production"
+
+      # Public vars are baked in at build time (see Dockerfile ARG).
+      # They are repeated here so `docker compose run` scenarios also see them.
+      NEXT_PUBLIC_APP_HOST: "localhost:3001"
+    ports:
+      - "3001:3001"
+    volumes:
+      # Persist uploaded images across container restarts
+      - uploads_data:/app/public/uploads
+    # To inject secrets at runtime without rebuilding, create .env.local and run:
+    #   docker compose -f docker-compose.yml -f docker-compose.local.yml up
+
+volumes:
+  mongo_data:
+    name: las-tapas-mongo-data
+  uploads_data:
+    name: las-tapas-uploads

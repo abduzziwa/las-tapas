@@ -62,6 +62,7 @@ export interface OrderData {
   orderId: string;
   sessionId: string;
   tableNumber: string;
+  guestName?: string;
   foodItems: {
     foodId: string;
     name: string;

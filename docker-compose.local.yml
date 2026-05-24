@@ -1,0 +1,10 @@
+# Override file — adds .env.local bind mount when the file exists locally.
+# Usage: docker compose -f docker-compose.yml -f docker-compose.local.yml up --build
+
+services:
+  app:
+    volumes:
+      - type: bind
+        source: ./.env.local
+        target: /app/.env.local
+        read_only: true

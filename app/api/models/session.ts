@@ -18,12 +18,19 @@ const sessionSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  seatNumber: {
+    type: String,
+    required: true,
+  },
+  guestName: {
+    type: String,
+    default: '',
+  },
   status: {
     type: String,
     enum: ['active', 'inactive'],
     default: 'active',
   },
-  // Omit the deviceId field
 });
 
 export const Session = mongoose.models.Session || mongoose.model('Session', sessionSchema, 'sessions');

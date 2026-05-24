@@ -1,15 +1,18 @@
 import mongoose, { Schema } from "mongoose";
 
-
 const orderSchema = new Schema({
   orderId: {
     type: Number,
     required: true,
     unique: true,
   },
-  employeeId:{
+  employeeId: {
     type: String,
     required: false,
+  },
+  guestName: {
+    type: String,
+    default: "",
   },
   sessionId: {
     type: String,
@@ -43,19 +46,27 @@ const orderSchema = new Schema({
       category: {
         type: String,
         required: true,
-        enum: ['food', 'drink', 'dessert'],
-      }
+        enum: ["food", "drink", "dessert"],
+      },
     },
   ],
   status: {
     type: String,
     required: true,
-    enum: ['notYetOrdered', 'ordered', 'preparing', 'ready', 'served'],
+    enum: ["notYetOrdered", "ordered", "preparing", "ready", "served"],
   },
   payment: {
     type: String,
     required: true,
-    enum: ['paid', 'unpaid', 'wantToPay'],
+    enum: ["paid", "unpaid", "wantToPay"],
+  },
+  paymentMethod: {
+    type: String,
+    default: "",
+  },
+  seatNumber: {
+    type: String,
+    default: "",
   },
   timestamps: {
     orderedAt: {
@@ -69,9 +80,10 @@ const orderSchema = new Schema({
     },
     servedAt: {
       type: Date,
-    }
+    },
   },
 });
 
-export const Orders = mongoose.models.Orders || mongoose.model('Orders', orderSchema, 'orders');
+export const Orders =
+  mongoose.models.Orders || mongoose.model("Orders", orderSchema, "orders");
 // export const Orders = model('orders', orderSchema, 'orders');

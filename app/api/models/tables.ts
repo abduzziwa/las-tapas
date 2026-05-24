@@ -16,9 +16,9 @@ const tableSchema = new mongoose.Schema({
     enum: ["available", "occupied", "booked"], // Status options
     default: "available",
   },
-  occupiedBy: {  // Added to track who occupies the table
-    type: String,
-    default: "none",  // Default value when table is not occupied
+  occupiedBy: {  // Array of sessionIds — one per seat currently active
+    type: [String],
+    default: [],
   },
 });
 

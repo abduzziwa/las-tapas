@@ -38,3 +38,8 @@ las-tapas.log
 *.log
 
 *Dockerfile
+# Uploaded images (persisted via Docker volume in production)
+public/uploads/food/*
+public/uploads/drinks/*
+public/uploads/desserts/*
+!public/uploads/**/.gitkeep

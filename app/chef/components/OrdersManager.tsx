@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import OrderContainer, { OrderData } from "./OrderContainer";
-import { endpoints } from "@/app/api/endpoint";
 
 // interface OrderData {
 //   _id: string;
@@ -25,7 +24,7 @@ const OrdersManager: React.FC = () => {
   const fetchOrders = useCallback(async () => {
     try {
       const response = await fetch(
-        `http://${endpoints.next_ip_port}/api/orders/chefOrderlist`
+        `/api/orders/chefOrderlist`
       );
       const newData = await response.json();
       if (Array.isArray(newData)) {
@@ -76,7 +75,7 @@ const OrdersManager: React.FC = () => {
     ) => {
       try {
         const response = await fetch(
-          `http://${endpoints.next_ip_port}/api/orders/updateOrderStatus`,
+          `/api/orders/updateOrderStatus`,
           {
             method: "PUT",
             headers: {

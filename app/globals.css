@@ -62,10 +62,38 @@
 @layer base {
   * {
     border-color: var(--border);
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
   }
+
+  html {
+    /* Prevent font size inflation on iOS when rotating */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
   body {
     background-color: var(--background);
     color: var(--foreground);
+    /* Prevent horizontal overflow on mobile */
+    overflow-x: hidden;
+    /* Smooth momentum scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Prevent double-tap zoom on buttons/links */
+  button, a, [role="button"] {
+    touch-action: manipulation;
+  }
+
+  /* Minimum touch target size (44px Apple HIG / 48dp Material) */
+  button, a, [role="button"] {
+    min-height: 44px;
+  }
+
+  /* Prevent iOS from zooming on input focus (requires font-size >= 16px) */
+  input, textarea, select {
+    font-size: max(16px, 1rem);
   }
 }
 

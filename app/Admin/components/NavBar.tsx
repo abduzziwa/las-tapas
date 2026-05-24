@@ -50,6 +50,20 @@ const NavBar: React.FC<NavBarProps> = ({ setSelectedComponent }) => {
                 >
                   Employees
                 </Button>
+                <Button
+                  variant="ghost"
+                  className="text-gray-600 hover:text-gray-900"
+                  onClick={() => setSelectedComponent("Payments")}
+                >
+                  Payments
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="text-gray-600 hover:text-gray-900"
+                  onClick={() => setSelectedComponent("LiveFeed")}
+                >
+                  Live Feed
+                </Button>
               </div>
             </div>
           </div>
@@ -105,6 +119,20 @@ const NavBar: React.FC<NavBarProps> = ({ setSelectedComponent }) => {
               onClick={() => setSelectedComponent("Employees")}
             >
               Employees
+            </Button>
+            <Button
+              variant="ghost"
+              className="block text-gray-600 hover:text-gray-900 w-full text-left"
+              onClick={() => setSelectedComponent("Payments")}
+            >
+              Payments
+            </Button>
+            <Button
+              variant="ghost"
+              className="block text-gray-600 hover:text-gray-900 w-full text-left"
+              onClick={() => setSelectedComponent("LiveFeed")}
+            >
+              Live Feed
             </Button>
           </div>
         </div>

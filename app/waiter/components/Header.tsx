@@ -90,6 +90,7 @@ const Header = ({ activeComponent, setActiveComponent }: HeaderProps) => {
     { label: "Orders", component: "waiter" },
     { label: "History", component: "history" },
     { label: "Pay Requests", component: "payRequests" },
+    { label: "Guests", component: "guests" },
   ];
 
   return (

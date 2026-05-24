@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { Orders } from '../../models/Order';
 import connectToDatabase from '../../models/Connection';
+import { log } from '../../utils/auditLogger';
 
 export async function GET(req: Request) {
     try {
@@ -43,7 +44,7 @@ export async function PUT(req: Request) {
 
         // Parse the request body
         const body = await req.json();
-        const { sessionId, paymentStatus, employeeId } = body;
+        const { sessionId, paymentStatus, employeeId, paymentMethod } = body;
 
         // Validate required fields
         if (!sessionId || !paymentStatus || !employeeId) {
@@ -55,12 +56,27 @@ export async function PUT(req: Request) {
         // Find and update the order
         const updatedOrder = await Orders.findOneAndUpdate(
             { orderId: orderId },
-            { payment: paymentStatus, employeeId: employeeId },
-            { new: true } // Returns the updated document
+            { payment: paymentStatus, employeeId: employeeId, paymentMethod: paymentMethod || '' },
+            { new: true }
         );
 
         if (!updatedOrder) {
             return NextResponse.json({ message: 'Order not found' }, { status: 404 });
+        }
+
+        if (paymentStatus === 'paid') {
+          const total = updatedOrder.foodItems.reduce(
+            (sum: number, item: { price: number; quantity: number }) => sum + item.price * item.quantity,
+            0
+          );
+          log({
+            eventType: 'order.payment.paid',
+            orderId: String(updatedOrder.orderId),
+            tableNumber: updatedOrder.tableNumber,
+            sessionId: updatedOrder.sessionId,
+            actor: { type: 'waiter', id: String(employeeId) },
+            details: { paymentMethod: paymentMethod || 'unknown', amount: Math.round(total * 100) },
+          });
         }
 
         return NextResponse.json(updatedOrder, { status: 200 });

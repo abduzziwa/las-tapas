@@ -2,29 +2,28 @@ import { NextResponse } from 'next/server';
 import { Orders } from '../../models/Order';
 import connectToDatabase from '../../models/Connection';
 
-export async function GET(req: Request) {
+export async function GET() {
     try {
         await connectToDatabase();
-        
-        // Get the URL from the request
-        const url = new URL(req.url);
-        const orderId = url.searchParams.get('orderId');
-        
-        let result;
-        if (orderId) {
-            // Find order with a specific id
-            result = await Orders.findById(orderId);
-            if (!result) {
-                return NextResponse.json({ message: 'Order not found' }, { status: 404 });
-            }
-        } else {
-            // No id provided, fetch all orders with 'ordered' status
-            result = await Orders.find({ status: { $in: ['ordered', 'preparing'] } })
-        }
-        
+
+        const rawOrders = await Orders.find({
+            status: { $in: ['ordered', 'preparing'] },
+            'foodItems.category': { $in: ['food', 'dessert'] },
+        }).lean();
+
+        // Strip drink items out — chef only handles food and desserts
+        const result = rawOrders
+            .map((order) => ({
+                ...order,
+                foodItems: order.foodItems.filter(
+                    (item: { category: string }) => item.category === 'food' || item.category === 'dessert'
+                ),
+            }))
+            .filter((order) => order.foodItems.length > 0);
+
         return NextResponse.json(result, { status: 200 });
     } catch (error) {
-        console.error('Error fetching orders:', error);
+        console.error('Error fetching chef orders:', error);
         return NextResponse.json({ message: 'Error fetching orders' }, { status: 500 });
     }
 }

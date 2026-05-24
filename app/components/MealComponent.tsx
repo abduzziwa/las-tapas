@@ -1,33 +1,62 @@
-import React from "react";
-import { Meal } from "../menu/foods/page";
+import React from 'react';
+import { Meal } from '../menu/foods/page';
 
-interface MealComponentProps {
+interface Props {
   meal: Meal;
   onMealClick: () => void;
 }
 
-const MealComponent: React.FC<MealComponentProps> = ({ meal, onMealClick }) => {
+const MealComponent: React.FC<Props> = ({ meal, onMealClick }) => {
+  const hasImage = Boolean(meal.imageUrl);
+
   return (
-    <div
+    <button
       onClick={onMealClick}
-      className='cursor-pointer flex flex-col w-[10.80rem] h-[150px] rounded-[20px] py-[10px] px-[16px] drop-shadow-lg bg-black bg-[url("../public/food.png")] bg-cover bg-center bg-opacity-50 mt-2'
+      className="relative w-full overflow-hidden rounded-2xl text-left focus:outline-none active:scale-[0.97] transition-transform"
+      style={{ aspectRatio: '3/4', background: '#2a1206' }}
     >
-      {/* <img
-        src={MealImage.src}
-        alt={meal.name}
-        className="w-full h-40 object-cover rounded-lg"
-      /> */}
-      <div className="absolute inset-0 bg-black bg-opacity-50 rounded-[20px]"></div>
-      <h3 className="text-white text-[25px] font-bold drop-shadow-lg leading-tight">
-        {meal.name}
-      </h3>
-      <p className="text-white text-[15px] leading-tight font-light drop-shadow-lg">
-        {meal.description}
-      </p>
-      {/* <p className="text-white text-[24px] leading-tight font-light drop-shadow-lg">
-        ${meal.price.toFixed(2)}
-      </p> */}
-    </div>
+      {/* Background image or gradient */}
+      {hasImage ? (
+        <img
+          src={meal.imageUrl}
+          alt={meal.name}
+          className="absolute inset-0 w-full h-full object-cover"
+          loading="lazy"
+        />
+      ) : (
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(145deg,#3d1800,#7a3412)' }}
+        />
+      )}
+
+      {/* Overlay gradient for text legibility */}
+      <div className="absolute inset-0" style={{
+        background: 'linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.18) 55%, transparent 100%)',
+      }} />
+
+      {/* Dietary badges */}
+      <div className="absolute top-2.5 left-2.5 flex gap-1.5 flex-wrap">
+        {meal.halal && (
+          <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-green-600 text-white leading-tight">
+            Halal
+          </span>
+        )}
+        {meal.vegetarian && (
+          <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500 text-white leading-tight">
+            Veg
+          </span>
+        )}
+      </div>
+
+      {/* Text content */}
+      <div className="absolute bottom-0 left-0 right-0 p-3.5">
+        <h3 className="text-white font-bold text-sm leading-snug line-clamp-2 drop-shadow">
+          {meal.name}
+        </h3>
+        <p className="text-white/75 text-xs mt-0.5 font-semibold">€{meal.price.toFixed(2)}</p>
+      </div>
+    </button>
   );
 };
 

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import connectToDatabase from "../../models/Connection";
 import { Orders } from "../../models/Order";
+import { log } from "../../utils/auditLogger";
 
 export async function PUT(req: Request) {
     try {
@@ -76,6 +77,16 @@ export async function PUT(req: Request) {
         });
 
         await Promise.all(updatePromises);
+
+        orders.forEach((order) => {
+          log({
+            eventType: 'order.payment.requested',
+            orderId: String(order.orderId),
+            tableNumber: order.tableNumber,
+            sessionId: order.sessionId,
+            actor: { type: 'customer', id: order.sessionId },
+          });
+        });
 
         return NextResponse.json(
             {

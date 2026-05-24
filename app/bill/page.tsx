@@ -1,723 +1,271 @@
-// "use client";
-
-// import React, { useState, useEffect } from "react";
-// import TopNavBar from "../components/TopNavBar";
-// import BottomNavBar from "../components/BottomNavBar";
-// import DropDownArrow from "../../public/dropdownarrow.svg";
-// import Image from "next/image";
-// import AuthGuard from "../components/AuthGuard";
-// import { endpoints } from "../api/endpoint";
-
-// interface BillItem {
-//   foodId: string;
-//   name: string;
-//   quantity: number;
-//   modification: string;
-//   price: number;
-//   category?: string;
-// }
-
-// interface Order {
-//   orderId: string;
-//   foodItems: BillItem[];
-//   payment: string;
-//   // add other fields as needed
-// }
-
-// type Category = "food" | "drink" | "dessert";
-
-// export default function Bill() {
-//   const [BillItems, setBillItems] = useState<BillItem[]>([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState<string | null>(null);
-//   const [expandedCategories, setExpandedCategories] = useState<
-//     Record<Category, boolean>
-//   >({
-//     food: false,
-//     drink: false,
-//     dessert: false,
-//   });
-
-//   useEffect(() => {
-//     const fetchBillItems = async () => {
-//       try {
-//         const sessionId = sessionStorage.getItem("sessionId");
-//         if (!sessionId) {
-//           throw new Error("No session ID found");
-//         }
-
-//         const response = await fetch(
-//           `http://${endpoints.next_ip_port}/api/orders/clientOrderlistOrdered?sessionId=${sessionId}`
-//         );
-
-//         if (!response.ok) {
-//           const errorData = await response.json();
-//           throw new Error(errorData.message || "Failed to fetch orders");
-//         }
-
-//         const orders: Order[] = await response.json();
-
-//         // Filter unpaid orders and extract their food items
-//         const unpaidFoodItems = orders
-//           .filter((order) => order.payment === "unpaid")
-//           .flatMap((order) => order.foodItems);
-
-//         // Set the extracted food items directly to BillItems state
-//         setBillItems(unpaidFoodItems);
-//       } catch (err) {
-//         setError(
-//           err instanceof Error ? err.message : "An unknown error occurred"
-//         );
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchBillItems();
-//   }, []); // Empty dependency array means this runs once on mount
-
-//   const toggleCategory = (category: Category) => {
-//     setExpandedCategories((prev) => ({
-//       ...prev,
-//       [category]: !prev[category],
-//     }));
-//   };
-
-//   const filterItemsByCategory = (category: Category): BillItem[] => {
-//     return BillItems.filter((item) => item.category === category);
-//   };
-
-//   const calculateTotal = (items: BillItem[]): string => {
-//     return items
-//       .reduce((total, item) => total + item.price * item.quantity, 0)
-//       .toFixed(2);
-//   };
-
-//   if (loading) {
-//     return <div>Loading...</div>;
-//   }
-
-//   if (error) {
-//     return <div>Error: {error}</div>;
-//   }
-
-//   const totalFood = calculateTotal(filterItemsByCategory("food"));
-//   const totalDrinks = calculateTotal(filterItemsByCategory("drink"));
-//   const totalDesserts = calculateTotal(filterItemsByCategory("dessert"));
-//   const grandTotal = (
-//     parseFloat(totalFood) +
-//     parseFloat(totalDrinks) +
-//     parseFloat(totalDesserts)
-//   ).toFixed(2);
-
-//   const renderCategorySection = (category: Category, total: string) => (
-//     <>
-//       <div className="flex w-full justify-between items-center">
-//         <div
-//           className="flex gap-[10px] items-center cursor-pointer"
-//           onClick={() => toggleCategory(category)}
-//         >
-//           <Image
-//             className={`w-fit h-fit transform ${
-//               expandedCategories[category] ? "rotate-180" : ""
-//             }`}
-//             src={DropDownArrow.src}
-//             width={20}
-//             height={20}
-//             alt="dropdownarrow"
-//           />
-//           <p className="font-bold text-2xl">
-//             Total {category.charAt(0).toUpperCase() + category.slice(1)}
-//           </p>
-//         </div>
-//         <div>
-//           <p>€{total}</p>
-//         </div>
-//       </div>
-//       {expandedCategories[category] && (
-//         <div className="w-full pl-4">
-//           {filterItemsByCategory(category).map((item, index) => (
-//             <div key={index} className="flex justify-between">
-//               <p>
-//                 {item.name} x{item.quantity}
-//               </p>
-//               <p>€{(item.price * item.quantity).toFixed(2)}</p>
-//             </div>
-//           ))}
-//         </div>
-//       )}
-//     </>
-//   );
-
-//   return (
-//     <AuthGuard>
-//       <main className="flex flex-col min-h-screen">
-//         <TopNavBar />
-//         <div className="flex flex-col items-center justify-center w-full flex-grow px-[14px] py-[24px] gap-[14px]">
-//           <h1 className="leading-tight text-[24px]">Bill</h1>
-
-//           {renderCategorySection("food", totalFood)}
-//           {renderCategorySection("drink", totalDrinks)}
-//           {renderCategorySection("dessert", totalDesserts)}
-
-//           <div className="flex w-full justify-end items-center gap-[6px]">
-//             <p>Total:</p>
-//             <p>€{grandTotal}</p>
-//           </div>
-//           <div>
-//             <button
-//               onClick={() => console.log("Clicked..")}
-//               className="flex py-[12px] px-[14px] bg-main rounded-full text-white"
-//             >
-//               💸I want to pay💸
-//             </button>
-//           </div>
-//         </div>
-//         <BottomNavBar />
-//       </main>
-//     </AuthGuard>
-//   );
-// }
-
-// "use client";
-
-// import React, { useState, useEffect } from "react";
-// import TopNavBar from "../components/TopNavBar";
-// import BottomNavBar from "../components/BottomNavBar";
-// import DropDownArrow from "../../public/dropdownarrow.svg";
-// import Image from "next/image";
-// import AuthGuard from "../components/AuthGuard";
-// import { endpoints } from "../api/endpoint";
-// import { toast } from "react-toastify";
-
-// interface BillItem {
-//   foodId: string;
-//   name: string;
-//   quantity: number;
-//   modification: string;
-//   price: number;
-//   category?: Category;
-// }
-
-// interface Order {
-//   orderId: string;
-//   foodItems: BillItem[];
-//   payment: "paid" | "unpaid";
-// }
-
-// type Category = "food" | "drink" | "dessert";
-
-// const CATEGORIES: Category[] = ["food", "drink", "dessert"];
-
-// export default function Bill() {
-//   const [billItems, setBillItems] = useState<BillItem[]>([]);
-//   const [orders, setOrders] = useState<Order[]>([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState<string | null>(null);
-//   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
-//   const [expandedCategories, setExpandedCategories] = useState<
-//     Record<Category, boolean>
-//   >(
-//     Object.fromEntries(CATEGORIES.map((cat) => [cat, false])) as Record<
-//       Category,
-//       boolean
-//     >
-//   );
-
-//   const fetchBillItems = async (sessionId: string) => {
-//     const response = await fetch(
-//       `http://${endpoints.next_ip_port}/api/orders/clientOrderlistOrdered?sessionId=${sessionId}`
-//     );
-
-//     if (!response.ok) {
-//       const errorData = await response.json();
-//       throw new Error(errorData.message || "Failed to fetch orders");
-//     }
-
-//     return response.json();
-//   };
-
-//   useEffect(() => {
-//     const initializeBillItems = async () => {
-//       try {
-//         const sessionId = sessionStorage.getItem("sessionId");
-//         if (!sessionId) {
-//           throw new Error("No session ID found");
-//         }
-
-//         const fetchedOrders: Order[] = await fetchBillItems(sessionId);
-//         setOrders(fetchedOrders);
-
-//         const unpaidFoodItems = fetchedOrders
-//           .filter((order) => order.payment === "unpaid")
-//           .flatMap((order) => order.foodItems);
-
-//         setBillItems(unpaidFoodItems);
-//       } catch (err) {
-//         setError(
-//           err instanceof Error ? err.message : "An unknown error occurred"
-//         );
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     initializeBillItems();
-//   }, []);
-
-//   const handlePayRequest = async () => {
-//     try {
-//       setIsPaymentProcessing(true);
-//       const sessionId = sessionStorage.getItem("sessionId");
-
-//       if (!sessionId) {
-//         throw new Error("No session ID found");
-//       }
-
-//       const unpaidOrderIds = orders
-//         .filter((order) => order.payment === "unpaid")
-//         .map((order) => order.orderId);
-
-//       if (unpaidOrderIds.length === 0) {
-//         throw new Error("No unpaid orders found");
-//       }
-
-//       const response = await fetch(
-//         `http://${
-//           endpoints.next_ip_port
-//         }/api/orders/iwantToPay?orderIds=${unpaidOrderIds.join(",")}`,
-//         {
-//           method: "PUT",
-//           headers: {
-//             "Content-Type": "application/json",
-//           },
-//           body: JSON.stringify({ sessionId }),
-//         }
-//       );
-
-//       if (!response.ok) {
-//         const errorData = await response.json();
-//         // throw new Error(errorData.message || "Failed to process payment");
-//         toast.error(errorData.message);
-//       }
-
-//       // Refresh bill items after successful payment
-//       const updatedOrders = await fetchBillItems(sessionId);
-//       setOrders(updatedOrders);
-
-//       const updatedUnpaidFoodItems = updatedOrders
-//         .filter((order: Order) => order.payment === "unpaid")
-//         .flatMap((order: Order) => order.foodItems);
-
-//       setBillItems(updatedUnpaidFoodItems);
-//       toast.success("Payment request sent successfully!");
-//       // alert("Payment request sent successfully!");
-//     } catch (err) {
-//       const errorMessage =
-//         err instanceof Error
-//           ? err.message
-//           : "An unknown error occurred during payment";
-//       setError(errorMessage);
-//       toast.error("OOPS: " + errorMessage);
-//       // alert(`Failed to send payment request: ${errorMessage}`);
-//     } finally {
-//       setIsPaymentProcessing(false);
-//     }
-//   };
-
-//   const toggleCategory = (category: Category) => {
-//     setExpandedCategories((prev) => ({
-//       ...prev,
-//       [category]: !prev[category],
-//     }));
-//   };
-
-//   const filterItemsByCategory = (category: Category): BillItem[] => {
-//     return billItems.filter((item) => item.category === category);
-//   };
-
-//   const calculateTotal = (items: BillItem[]): number => {
-//     return Number(
-//       items
-//         .reduce((total, item) => total + item.price * item.quantity, 0)
-//         .toFixed(2)
-//     );
-//   };
-
-//   const CategorySection: React.FC<{ category: Category; total: number }> = ({
-//     category,
-//     total,
-//   }) => (
-//     <div className="w-full space-y-2">
-//       <div className="flex justify-between items-center">
-//         <button
-//           className="flex gap-[10px] items-center"
-//           onClick={() => toggleCategory(category)}
-//         >
-//           <span className="hidden">none</span>
-//           <Image
-//             className={`transform transition-transform ${
-//               expandedCategories[category] ? "rotate-180" : ""
-//             }`}
-//             src={DropDownArrow.src}
-//             width={20}
-//             height={20}
-//             alt={`Toggle ${category} details`}
-//           />
-//           <p className="font-bold text-2xl capitalize">Total {category}</p>
-//         </button>
-//         <p>€{total.toFixed(2)}</p>
-//       </div>
-//       {expandedCategories[category] && (
-//         <div className="w-full pl-4 space-y-1">
-//           {filterItemsByCategory(category).map((item) => (
-//             <div key={item.foodId} className="flex justify-between">
-//               <p>
-//                 {item.name} x{item.quantity}
-//                 {item.modification && ` (${item.modification})`}
-//               </p>
-//               <p>€{(item.price * item.quantity).toFixed(2)}</p>
-//             </div>
-//           ))}
-//         </div>
-//       )}
-//     </div>
-//   );
-
-//   if (loading) {
-//     return (
-//       <div className="flex min-h-screen items-center justify-center">
-//         <p className="text-lg">Loading your bill...</p>
-//       </div>
-//     );
-//   }
-
-//   if (error) {
-//     return (
-//       <div className="flex min-h-screen items-center justify-center">
-//         <p className="text-red-600">Error: {error}</p>
-//       </div>
-//     );
-//   }
-
-//   const categoriesTotal = CATEGORIES.map((category) => ({
-//     category,
-//     total: calculateTotal(filterItemsByCategory(category)),
-//   }));
-
-//   const grandTotal = categoriesTotal.reduce((sum, { total }) => sum + total, 0);
-
-//   return (
-//     <AuthGuard>
-//       <main className="flex flex-col min-h-screen">
-//         <TopNavBar />
-//         <div className="flex flex-col items-center justify-center w-full flex-grow px-4 py-6 gap-4">
-//           <h1 className="text-2xl font-bold">Bill</h1>
-
-//           {categoriesTotal.map(({ category, total }) => (
-//             <CategorySection key={category} category={category} total={total} />
-//           ))}
-
-//           <div className="flex w-full justify-end items-center gap-2">
-//             <p className="font-bold">Total:</p>
-//             <p className="font-bold">€{grandTotal.toFixed(2)}</p>
-//           </div>
-
-//           <button
-//             disabled={isPaymentProcessing || billItems.length === 0}
-//             onClick={handlePayRequest}
-//             className={`
-//               flex py-3 px-4 rounded-full text-white transition-colors
-//               ${
-//                 isPaymentProcessing || billItems.length === 0
-//                   ? "bg-gray-400 cursor-not-allowed"
-//                   : "bg-main hover:bg-main/90"
-//               }
-//             `}
-//           >
-//             {isPaymentProcessing
-//               ? "Processing..."
-//               : billItems.length === 0
-//               ? "No items to pay"
-//               : "Or ask a waiter to pay cash"}
-//           </button>
-//         </div>
-//         <BottomNavBar />
-//       </main>
-//     </AuthGuard>
-//   );
-// }
-
-"use client";
-
-import React, { useState, useEffect } from "react";
-import TopNavBar from "../components/TopNavBar";
-import BottomNavBar from "../components/BottomNavBar";
-import DropDownArrow from "../../public/dropdownarrow.svg";
-import Image from "next/image";
-import AuthGuard from "../components/AuthGuard";
-import { endpoints } from "../api/endpoint";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+'use client';
+import React, { useState, useEffect, useCallback } from 'react';
+import QRCode from 'react-qr-code';
+import { ChevronDown, ChevronUp } from 'lucide-react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import TopNavBar from '../components/TopNavBar';
+import BottomNavBar from '../components/BottomNavBar';
+import AuthGuard from '../components/AuthGuard';
 
 interface BillItem {
-  foodId: string;
-  name: string;
-  quantity: number;
+  foodId:       string;
+  name:         string;
+  quantity:     number;
   modification: string;
-  price: number;
-  category?: Category;
+  price:        number;
+  category?:    Category;
 }
 
 interface Order {
-  orderId: string;
+  orderId:   string;
   foodItems: BillItem[];
-  payment: "paid" | "unpaid";
+  payment:   'paid' | 'unpaid' | 'wantToPay';
 }
 
-type Category = "food" | "drink" | "dessert";
-
-const CATEGORIES: Category[] = ["food", "drink", "dessert"];
+type Category = 'food' | 'drink' | 'dessert';
+const CATEGORIES: Category[] = ['food', 'drink', 'dessert'];
+const CAT_LABELS: Record<Category, string> = { food: 'Food', drink: 'Drinks', dessert: 'Desserts' };
+const CAT_EMOJI:  Record<Category, string> = { food: '🍽️', drink: '🥤', dessert: '🍰' };
 
 export default function Bill() {
-  const [billItems, setBillItems] = useState<BillItem[]>([]);
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
-  const [expandedCategories, setExpandedCategories] = useState<
-    Record<Category, boolean>
-  >(
-    Object.fromEntries(CATEGORIES.map((cat) => [cat, false])) as Record<
-      Category,
-      boolean
-    >
-  );
+  const [allItems,       setAllItems]       = useState<BillItem[]>([]);
+  const [orders,         setOrders]         = useState<Order[]>([]);
+  const [loading,        setLoading]        = useState(true);
+  const [isPaying,       setIsPaying]       = useState(false);
+  const [isTikkieLoading,setIsTikkieLoading]= useState(false);
+  const [tikkieUrl,      setTikkieUrl]      = useState<string | null>(null);
+  const [exitQrUrl,      setExitQrUrl]      = useState<string | null>(null);
+  const [showExitQr,     setShowExitQr]     = useState(false);
+  const [expanded, setExpanded]             = useState<Record<Category, boolean>>({
+    food: true, drink: true, dessert: true,
+  });
 
-  const fetchBillItems = async (sessionId: string) => {
-    try {
-      const response = await fetch(
-        `http://${endpoints.next_ip_port}/api/orders/clientOrderlistOrdered?sessionId=${sessionId}`
-      );
+  const isPending = orders.some(o => o.payment === 'wantToPay');
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        toast.error(errorData.message || "Failed to fetch orders");
-        return null;
-      }
-
-      return response.json();
-    } catch (error) {
-      toast.error("Failed to fetch bill items. Please try again.");
-      return null;
-    }
-  };
-
-  useEffect(() => {
-    const initializeBillItems = async () => {
-      try {
-        const sessionId = sessionStorage.getItem("sessionId");
-        if (!sessionId) {
-          toast.error("No session found. Please try logging in again.");
-          return;
-        }
-
-        const fetchedOrders = await fetchBillItems(sessionId);
-        if (fetchedOrders) {
-          setOrders(fetchedOrders);
-          const unpaidFoodItems = fetchedOrders
-            .filter((order: Order) => order.payment === "unpaid")
-            .flatMap((order: Order) => order.foodItems);
-          setBillItems(unpaidFoodItems);
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    initializeBillItems();
+  const fetchBill = useCallback(async (sessionId: string) => {
+    const res = await fetch(`/api/orders/clientOrderlistOrdered?sessionId=${sessionId}`);
+    if (!res.ok) throw new Error((await res.json()).message || 'Failed to fetch bill');
+    return res.json() as Promise<Order[]>;
   }, []);
 
-  const handlePayRequest = async () => {
+  useEffect(() => {
+    const init = async () => {
+      try {
+        const sessionId = sessionStorage.getItem('sessionId');
+        if (!sessionId) { toast.error('No session found. Please scan your QR code.'); return; }
+        const fetched = await fetchBill(sessionId);
+        setOrders(fetched);
+        setAllItems(fetched.filter(o => o.payment !== 'paid').flatMap(o => o.foodItems));
+        if (fetched.some(o => o.payment === 'wantToPay')) loadExitQr(sessionId);
+      } catch { toast.error('Could not load your bill.'); }
+      finally { setLoading(false); }
+    };
+    init();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const loadExitQr = async (sessionId: string) => {
+    if (exitQrUrl) return;
     try {
-      setIsPaymentProcessing(true);
-      const sessionId = sessionStorage.getItem("sessionId");
-
-      if (!sessionId) {
-        toast.error("No session found. Please try logging in again.");
-        return;
-      }
-
-      const unpaidOrderIds = orders
-        .filter((order) => order.payment === "unpaid")
-        .map((order) => order.orderId);
-
-      if (unpaidOrderIds.length === 0) {
-        toast.warning("No unpaid orders found.");
-        return;
-      }
-
-      const response = await fetch(
-        `http://${
-          endpoints.next_ip_port
-        }/api/orders/iwantToPay?orderIds=${unpaidOrderIds.join(",")}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ sessionId }),
-        }
-      );
-
-      const responseData = await response.json();
-
-      if (!response.ok) {
-        toast.error(responseData.message || "Failed to process payment");
-        return;
-      }
-
-      // Only refresh the bill items if the payment request was successful
-      const updatedOrders = await fetchBillItems(sessionId);
-      if (updatedOrders) {
-        setOrders(updatedOrders);
-        const updatedUnpaidFoodItems = updatedOrders
-          .filter((order: Order) => order.payment === "unpaid")
-          .flatMap((order: Order) => order.foodItems);
-        setBillItems(updatedUnpaidFoodItems);
-      }
-      toast.success("Payment request sent successfully!");
-    } catch (err) {
-      toast.error("Failed to process payment. Please try again.");
-    } finally {
-      setIsPaymentProcessing(false);
-    }
+      const res = await fetch(`/api/checkout/token?sessionId=${sessionId}`);
+      if (res.ok) setExitQrUrl((await res.json()).checkoutUrl);
+    } catch { /* silent */ }
   };
 
-  const toggleCategory = (category: Category) => {
-    setExpandedCategories((prev) => ({
-      ...prev,
-      [category]: !prev[category],
-    }));
+  const handlePayRequest = async () => {
+    setIsPaying(true);
+    try {
+      const sessionId = sessionStorage.getItem('sessionId');
+      if (!sessionId) { toast.error('No session found.'); return; }
+
+      const unpaidIds = orders.filter(o => o.payment === 'unpaid').map(o => o.orderId);
+      if (!unpaidIds.length) { toast.warning('No unpaid orders found.'); return; }
+
+      const res = await fetch(`/api/orders/iwantToPay?orderIds=${unpaidIds.join(',')}`, {
+        method: 'PUT', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId }),
+      });
+      const data = await res.json();
+      if (!res.ok) { toast.error(data.message || 'Failed to request payment'); return; }
+
+      const updated = await fetchBill(sessionId);
+      setOrders(updated);
+      setAllItems(updated.filter(o => o.payment !== 'paid').flatMap(o => o.foodItems));
+      await loadExitQr(sessionId);
+      toast.success('Payment request sent! Your waiter is on the way.');
+    } catch { toast.error('Failed to request payment.'); }
+    finally { setIsPaying(false); }
   };
 
-  const filterItemsByCategory = (category: Category): BillItem[] => {
-    return billItems.filter((item) => item.category === category);
+  const handleTikkie = async () => {
+    setIsTikkieLoading(true);
+    try {
+      const sessionId = sessionStorage.getItem('sessionId');
+      if (!sessionId) { toast.error('No session found.'); return; }
+      const res  = await fetch('/api/checkout', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId }),
+      });
+      const data = await res.json();
+      if (!res.ok) { toast.error(data.message || 'Could not create Tikkie link'); return; }
+      setTikkieUrl(data.url);
+      if (data.demo) toast.info('Demo mode — no real Tikkie credentials configured');
+    } catch { toast.error('Failed to create Tikkie link.'); }
+    finally { setIsTikkieLoading(false); }
   };
 
-  const calculateTotal = (items: BillItem[]): number => {
-    return Number(
-      items
-        .reduce((total, item) => total + item.price * item.quantity, 0)
-        .toFixed(2)
-    );
-  };
-
-  const CategorySection: React.FC<{ category: Category; total: number }> = ({
-    category,
-    total,
-  }) => (
-    <div className="w-full space-y-2">
-      <div className="flex justify-between items-center">
-        <button
-          className="flex gap-[10px] items-center"
-          onClick={() => toggleCategory(category)}
-        >
-          <span className="hidden">none</span>
-          <Image
-            className={`transform transition-transform ${
-              expandedCategories[category] ? "rotate-180" : ""
-            }`}
-            src={DropDownArrow.src}
-            width={20}
-            height={20}
-            alt={`Toggle ${category} details`}
-          />
-          <p className="font-bold text-2xl capitalize">Total {category}</p>
-        </button>
-        <p>€{total.toFixed(2)}</p>
-      </div>
-      {expandedCategories[category] && (
-        <div className="w-full pl-4 space-y-1">
-          {filterItemsByCategory(category).map((item) => (
-            <div key={item.foodId} className="flex justify-between">
-              <p>
-                {item.name} x{item.quantity}
-                {item.modification && ` (${item.modification})`}
-              </p>
-              <p>€{(item.price * item.quantity).toFixed(2)}</p>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+  const filterByCat = (cat: Category) => allItems.filter(i => i.category === cat);
+  const catTotal    = (cat: Category) =>
+    filterByCat(cat).reduce((s, i) => s + i.price * i.quantity, 0);
+  const grandTotal  = allItems.reduce((s, i) => s + i.price * i.quantity, 0);
 
   if (loading) {
     return (
       <AuthGuard>
-        <main className="flex min-h-screen items-center justify-center">
+        <main className="flex min-h-screen flex-col bg-gray-50">
           <TopNavBar />
-          <ToastContainer
-            position="top-center"
-            autoClose={3000}
-            hideProgressBar
-          />
-          <p className="text-lg">Loading your bill...</p>
+          <div className="flex-1 flex items-center justify-center">
+            <div className="w-10 h-10 border-2 border-orange-400 border-t-transparent rounded-full animate-spin" />
+          </div>
           <BottomNavBar />
         </main>
       </AuthGuard>
     );
   }
 
-  const categoriesTotal = CATEGORIES.map((category) => ({
-    category,
-    total: calculateTotal(filterItemsByCategory(category)),
-  }));
-
-  const grandTotal = categoriesTotal.reduce((sum, { total }) => sum + total, 0);
-
   return (
     <AuthGuard>
-      <main className="flex flex-col min-h-screen">
+      <main className="flex flex-col min-h-screen bg-gray-50">
         <TopNavBar />
-        <ToastContainer
-          position="top-center"
-          autoClose={3000}
-          hideProgressBar
-        />
+        <ToastContainer position="top-center" autoClose={3000} hideProgressBar />
 
-        <div className="flex flex-col items-center justify-center w-full flex-grow px-4 py-6 gap-4">
-          <h1 className="text-2xl font-bold">Bill</h1>
+        <div className="flex-1 px-3 pt-4 pb-36 max-w-lg mx-auto w-full">
+          {allItems.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-52 text-gray-400">
+              <p className="text-5xl mb-3">🧾</p>
+              <p className="text-base font-medium">No outstanding items</p>
+              <p className="text-sm mt-1">Everything looks settled!</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {CATEGORIES.map(cat => {
+                const items = filterByCat(cat);
+                if (!items.length) return null;
+                const total = catTotal(cat);
+                const open  = expanded[cat];
+                return (
+                  <div key={cat} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <button
+                      className="w-full flex items-center justify-between px-4 py-3.5"
+                      onClick={() => setExpanded(e => ({ ...e, [cat]: !e[cat] }))}
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <span className="text-lg">{CAT_EMOJI[cat]}</span>
+                        <span className="font-semibold text-gray-900">{CAT_LABELS[cat]}</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="font-bold text-gray-800">€{total.toFixed(2)}</span>
+                        {open
+                          ? <ChevronUp className="w-4 h-4 text-gray-400" />
+                          : <ChevronDown className="w-4 h-4 text-gray-400" />
+                        }
+                      </div>
+                    </button>
+                    {open && (
+                      <div className="border-t border-gray-100 px-4 py-2 space-y-2">
+                        {items.map((item, idx) => (
+                          <div key={`${item.foodId}-${idx}`} className="flex justify-between items-start py-1.5">
+                            <div className="flex-1 min-w-0 pr-3">
+                              <p className="text-sm text-gray-800 leading-snug">
+                                {item.name}
+                                <span className="text-gray-400 font-normal"> ×{item.quantity}</span>
+                              </p>
+                              {item.modification && item.modification !== 'none' && (
+                                <p className="text-xs text-gray-400 italic mt-0.5">{item.modification}</p>
+                              )}
+                            </div>
+                            <p className="text-sm font-semibold text-gray-800 flex-shrink-0">
+                              €{(item.price * item.quantity).toFixed(2)}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
 
-          {categoriesTotal.map(({ category, total }) => (
-            <CategorySection key={category} category={category} total={total} />
-          ))}
+              {/* Grand total */}
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 px-4 py-4 flex justify-between items-center">
+                <span className="font-bold text-gray-900 text-base">Total</span>
+                <span className="font-black text-gray-900 text-xl">€{grandTotal.toFixed(2)}</span>
+              </div>
+            </div>
+          )}
 
-          <div className="flex w-full justify-end items-center gap-2">
-            <p className="font-bold">Total:</p>
-            <p className="font-bold">€{grandTotal.toFixed(2)}</p>
-          </div>
+          {/* Payment pending */}
+          {isPending && allItems.length > 0 && (
+            <div className="mt-4 space-y-3">
+              <div className="bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3.5 text-center">
+                <p className="text-amber-700 font-semibold text-sm">Payment requested</p>
+                <p className="text-amber-600 text-xs mt-0.5">Your waiter is on the way. You can also pay below.</p>
+              </div>
 
-          <button
-            disabled={isPaymentProcessing || billItems.length === 0}
-            onClick={handlePayRequest}
-            className={`
-              flex py-3 px-4 rounded-full text-white transition-colors
-              ${
-                isPaymentProcessing || billItems.length === 0
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-main hover:bg-main/90"
-              }
-            `}
-          >
-            {isPaymentProcessing
-              ? "Processing..."
-              : billItems.length === 0
-              ? "No items to pay"
-              : "Request to pay"}
-          </button>
+              {!tikkieUrl ? (
+                <button onClick={handleTikkie} disabled={isTikkieLoading}
+                  className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-[#0075E5] text-white font-semibold text-sm disabled:opacity-60 active:opacity-80 transition-opacity">
+                  {isTikkieLoading ? 'Creating link…' : '💸 Pay via Tikkie'}
+                </button>
+              ) : (
+                <a href={tikkieUrl} target="_blank" rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-[#0075E5] text-white font-semibold text-sm active:opacity-80">
+                  Open Tikkie →
+                </a>
+              )}
+
+              <button onClick={() => setShowExitQr(v => !v)}
+                className="w-full py-4 rounded-2xl border border-gray-200 text-gray-700 text-sm font-medium bg-white active:bg-gray-50 transition-colors">
+                {showExitQr ? 'Hide exit QR' : 'Show exit QR (cash / PIN at counter)'}
+              </button>
+
+              {showExitQr && exitQrUrl && (
+                <div className="flex flex-col items-center gap-3 bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                  <p className="text-sm text-gray-500 text-center">Show this QR to staff after paying at the counter</p>
+                  <div className="p-3 bg-white rounded-xl border border-gray-100">
+                    <QRCode value={exitQrUrl} size={160} />
+                  </div>
+                  <p className="text-xs text-gray-400">Scanning this frees your table automatically</p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
+
+        {/* Sticky pay button */}
+        {!isPending && allItems.length > 0 && (
+          <div className="fixed bottom-[80px] left-0 right-0 px-3 pb-2 z-30 pointer-events-none">
+            <div className="max-w-lg mx-auto pointer-events-auto">
+              <button
+                onClick={handlePayRequest}
+                disabled={isPaying}
+                className="w-full py-4 rounded-2xl text-white font-bold text-base transition-all active:scale-[0.98] disabled:opacity-60 shadow-lg"
+                style={{ background: 'linear-gradient(135deg,#F95E07,#DB8555)' }}
+              >
+                {isPaying ? 'Requesting…' : '💸 Request to Pay'}
+              </button>
+            </div>
+          </div>
+        )}
+
         <BottomNavBar />
+
+        <footer className="px-4 py-3 border-t border-gray-100 bg-white text-center">
+          <p className="text-[10px] text-gray-400 leading-relaxed">
+            Order data is processed solely to manage your visit. Session data removed after your visit.
+            Records kept 30 days for accounting. · <span className="underline">privacy@lastapas.nl</span>
+          </p>
+        </footer>
       </main>
     </AuthGuard>
   );
